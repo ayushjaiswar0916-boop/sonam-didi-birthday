@@ -2,38 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sonam Didi Birthday 🎂</title>
+  <title>Sonam Didi • New Year 2026</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="countdown" class="countdown"></div>
+  <div class="container">
+    <h1>✨ Hello 2026 ✨</h1>
+    <h2>Welcoming the New Year with</h2>
+    <h3>Sonam Didi’s 26th Birthday 🎂</h3>
 
-  <div class="card">
-    <h1>Happy Birthday Sonam Didi 🎉</h1>
-    <p class="subtitle">A warm birthday message for you 💐</p>
-
-    <p>
-      Dear Sonam Didi,<br><br>
-      Wishing you a very happy birthday.
-      May your life always be filled with happiness,
-      good health, and success.
-      Thank you for always being caring and supportive.
-      <br><br>
-      With love and respect,<br>
-      Your cousin 💙
-    </p>
+    <div id="countdown" class="countdown"></div>
   </div>
 
+  <div id="celebration"></div>
+
   <script>
-    const birthday = new Date("January 1, 2026 00:00:00").getTime();
+    const targetDate = new Date("January 1, 2026 00:00:00").getTime();
+    const countdownEl = document.getElementById("countdown");
+    const celebrationEl = document.getElementById("celebration");
+    const emojis = ["🎉", "✨", "🎆", "🎂", "💐"];
+
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const diff = birthday - now;
+      const diff = targetDate - now;
 
       if (diff <= 0) {
-        document.getElementById("countdown").innerHTML =
-          "🎉 Happy Birthday Sonam Didi 🎂💐";
+        countdownEl.innerHTML =
+          "🎉 Happy New Year & Happy 26th Birthday Sonam Didi 🎂✨";
+        startCelebration();
         clearInterval(timer);
         return;
       }
@@ -43,10 +40,22 @@
       const m = Math.floor((diff / (1000 * 60)) % 60);
       const s = Math.floor((diff / 1000) % 60);
 
-      document.getElementById("countdown").innerHTML =
-        `🎈 Sonam Didi’s Birthday in ${d}d ${h}h ${m}m ${s}s`;
+      countdownEl.innerHTML =
+        `${d} Days : ${h} Hours : ${m} Minutes : ${s} Seconds`;
     }, 1000);
+
+    function startCelebration() {
+      setInterval(() => {
+        const emoji = document.createElement("span");
+        emoji.className = "float";
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + "vw";
+        emoji.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        celebrationEl.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 6000);
+      }, 300);
+    }
   </script>
 
 </body>
-</html>
+</html
