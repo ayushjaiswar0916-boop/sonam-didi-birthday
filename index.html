@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sonam Didi Birthday 🎂</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div id="countdown" class="countdown"></div>
+
+  <div class="card">
+    <h1>Happy Birthday Sonam Didi 🎉</h1>
+    <p class="subtitle">A warm birthday message for you 💐</p>
+
+    <p>
+      Dear Sonam Didi,<br><br>
+      Wishing you a very happy birthday.
+      May your life always be filled with happiness,
+      good health, and success.
+      Thank you for always being caring and supportive.
+      <br><br>
+      With love and respect,<br>
+      Your cousin 💙
+    </p>
+  </div>
+
+  <script>
+    const birthday = new Date("January 1, 2026 00:00:00").getTime();
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = birthday - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerHTML =
+          "🎉 Happy Birthday Sonam Didi 🎂💐";
+        clearInterval(timer);
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("countdown").innerHTML =
+        `🎈 Sonam Didi’s Birthday in ${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
+  </script>
+
+</body>
+</html>
