@@ -1,61 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sonam Didi • New Year 2026</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Quiet Moment</title>
+
+<style>
+    body{
+        margin:0;
+        height:100vh;
+        background:radial-gradient(circle at bottom,#1b1a2f,#0a0a14);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        overflow:hidden;
+        font-family:'Poppins',sans-serif;
+        text-align:center;
+        color:#e8e4ff;
+    }
+
+    .countdown{
+        font-size:2.5rem;
+        z-index:2;
+    }
+
+    .quote{
+        font-size:2.3rem;
+        opacity:0;
+        animation:fadeIn 3s ease forwards;
+        z-index:2;
+        line-height:1.5;
+    }
+
+    @keyframes fadeIn{
+        from{opacity:0;transform:translateY(20px);}
+        to{opacity:1;transform:translateY(0);}
+    }
+
+    /* ⭐ stars */
+    .star{
+        position:absolute;
+        width:2px;
+        height:2px;
+        background:white;
+        border-radius:50%;
+        opacity:.8;
+        animation:twinkle 3s infinite alternate;
+    }
+
+    @keyframes twinkle{
+        from{opacity:.3;}
+        to{opacity:1;}
+    }
+
+    /* 🌷 flowers */
+    .flower{
+        position:absolute;
+        font-size:1.4rem;
+        opacity:.5;
+        animation:floatUp 18s linear infinite;
+    }
+
+    @keyframes floatUp{
+        from{transform:translateY(110vh);}
+        to{transform:translateY(-10vh);}
+    }
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>✨ Hello 2026 ✨</h1>
-    <h2>Welcoming the New Year with</h2>
-    <h3>Sonam Didi’s 26th Birthday 🎂</h3>
+<div id="content" class="countdown"></div>
 
-    <div id="countdown" class="countdown"></div>
-  </div>
+<!-- 🎵 MUSIC (place your music file in same folder as index.html) -->
+<audio id="bgMusic" src="music1.mp3"></audio>
 
-  <div id="celebration"></div>
-
-  <script>
+<script>
     const targetDate = new Date("January 1, 2026 00:00:00").getTime();
-    const countdownEl = document.getElementById("countdown");
-    const celebrationEl = document.getElementById("celebration");
-    const emojis = ["🎉", "✨", "🎆", "🎂", "💐"];
+    const content = document.getElementById("content");
+    const music = document.getElementById("bgMusic");
+    let redirected = false;
 
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+    function showQuote(){
+        content.className = "quote";
+        content.innerHTML = "And quietly… it became now<br>🌷🌌";
 
-      if (diff <= 0) {
-        countdownEl.innerHTML =
-          "🎉 Happy New Year & Happy 26th Birthday Sonam Didi 🎂✨";
-        startCelebration();
-        clearInterval(timer);
-        return;
-      }
+        // 🎶 Start music
+        music.play().catch(()=>{});
 
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-
-      countdownEl.innerHTML =
-        `${d} Days : ${h} Hours : ${m} Minutes : ${s} Seconds`;
-    }, 1000);
-
-    function startCelebration() {
-      setInterval(() => {
-        const emoji = document.createElement("span");
-        emoji.className = "float";
-        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        emoji.style.left = Math.random() * 100 + "vw";
-        emoji.style.animationDuration = (Math.random() * 3 + 3) + "s";
-        celebrationEl.appendChild(emoji);
-        setTimeout(() => emoji.remove(), 6000);
-      }, 300);
+        if(!redirected){
+            redirected = true;
+            setTimeout(()=>{
+                window.location.href="page2.html"; // Change if next page name is different
+            },8000);
+        }
     }
-  </script>
+
+    function update(){
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if(diff<=0){
+            showQuote();
+            return;
+        }
+
+        const d=Math.floor(diff/(1000*60*60*24));
+        const h=Math.floor((diff/(1000*60*60))%24);
+        const m=Math.floor((diff/(1000*60))%60);
+        const s=Math.floor((diff/1000)%60);
+
+        content.innerHTML=`${d}d ${h}h ${m}m ${s}s`;
+    }
+
+    update();
+    setInterval(update,1000);
+
+    // ⭐ Create stars
+    for(let i=0;i<120;i++){
+        const star=document.createElement("div");
+        star.className="star";
+        star.style.left=Math.random()*100+"vw";
+        star.style.top=Math.random()*100+"vh";
+        star.style.animationDelay=Math.random()*3+"s";
+        document.body.appendChild(star);
+    }
+
+    // 🌷 Floating flowers
+    setInterval(()=>{
+        const flower=document.createElement("div");
+        flower.className="flower";
+        flower.innerHTML="🌷";
+        flower.style.left=Math.random()*100+"vw";
+        document.body.appendChild(flower);
+        setTimeout(()=>flower.remove(),18000);
+    },3000);
+
+    // 🎧 Fallback for autoplay block
+    document.body.addEventListener("click",()=>music.play());
+</script>
 
 </body>
-</html
+</html>
