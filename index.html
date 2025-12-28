@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Quiet Moment</title>
+<title>Test Countdown</title>
 
 <style>
     body{
@@ -36,7 +36,6 @@
         to{opacity:1;transform:translateY(0);}
     }
 
-    /* ⭐ stars */
     .star{
         position:absolute;
         width:2px;
@@ -52,7 +51,6 @@
         to{opacity:1;}
     }
 
-    /* 🌷 flowers */
     .flower{
         position:absolute;
         font-size:1.4rem;
@@ -71,11 +69,11 @@
 
 <div id="content" class="countdown"></div>
 
-<!-- 🎵 MUSIC (place your music file in same folder as index.html) -->
+<!-- 🎵 Music -->
 <audio id="bgMusic" src="music1.mp3"></audio>
 
 <script>
-    const targetDate = new Date("January 1, 2026 00:00:00").getTime();
+    const targetDate = new Date(new Date().getTime() + 30000).getTime(); // 30 seconds from now
     const content = document.getElementById("content");
     const music = document.getElementById("bgMusic");
     let redirected = false;
@@ -84,13 +82,24 @@
         content.className = "quote";
         content.innerHTML = "And quietly… it became now<br>🌷🌌";
 
-        // 🎶 Start music
-        music.play().catch(()=>{});
+        // 🎶 Music fade-in
+        music.volume = 0;
+        music.play().then(()=>{
+            let vol = 0;
+            const fadeIn = setInterval(()=>{
+                if(vol < 1){
+                    vol += 0.02;
+                    music.volume = vol;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            },100);
+        });
 
         if(!redirected){
             redirected = true;
             setTimeout(()=>{
-                window.location.href="page2.html"; // Change if next page name is different
+                window.location.href="page2.html"; // change as needed
             },8000);
         }
     }
@@ -115,7 +124,7 @@
     update();
     setInterval(update,1000);
 
-    // ⭐ Create stars
+    // ⭐ Stars
     for(let i=0;i<120;i++){
         const star=document.createElement("div");
         star.className="star";
@@ -135,7 +144,7 @@
         setTimeout(()=>flower.remove(),18000);
     },3000);
 
-    // 🎧 Fallback for autoplay block
+    // Fallback for autoplay
     document.body.addEventListener("click",()=>music.play());
 </script>
 
