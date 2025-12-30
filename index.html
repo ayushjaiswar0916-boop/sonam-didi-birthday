@@ -8,7 +8,7 @@
 <body>
 
 <div class="stars"></div>
-<div id="scene"></div>
+<canvas id="fireworksCanvas"></canvas>
 
 <div id="text" class="hidden">
   <div class="line l1">AND QUIETLY IT BECAME NOW</div>
@@ -17,92 +17,143 @@
 </div>
 
 <script>
-const scene = document.getElementById("scene");
-const text = document.getElementById("text");
-const lines = document.querySelectorAll(".line");
+const canvas = document.getElementById('fireworksCanvas');
+const ctx = canvas.getContext('2d');
+let cw, ch;
 
-const colors = [
-  "#ff1744", "#ffd600", "#00e5ff",
-  "#76ff03", "#e040fb", "#ff9100"
-];
+function resizeCanvas() {
+  cw = window.innerWidth;
+  ch = window.innerHeight;
+  canvas.width = cw;
+  canvas.height = ch;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-let count = 0;
-setTimeout(sequence, 1200);
-
-function sequence() {
-  if (count < 5) {
-    count++;
-    launch(false);
-    setTimeout(sequence, 2000);
-  } else {
-    setTimeout(() => launch(true), 2000);
+class Firework {
+  constructor() {
+    this.x = cw / 2;
+    this.y = ch;
+    this.targetY = ch * (0.3 + Math.random() * 0.2); // burst height
+    this.speed = 8 + Math.random() * 3;
+    this.sparks = [];
+    this.exploded = false;
   }
-}
-
-function launch(final) {
-  const rocket = document.createElement("div");
-  rocket.className = "rocket";
-  scene.appendChild(rocket);
-
-  rocket.animate(
-    [{ bottom: "0" }, { bottom: "55vh" }],
-    { duration: 1400, easing: "cubic-bezier(.4,0,.2,1)" }
-  );
-
-  setTimeout(() => {
-    rocket.remove();
-    explode(final);
-  }, 1400);
-}
-
-function explode(final) {
-  const total = final ? 220 : 140;
-  const power = final ? 420 : 300;
-
-  for (let i = 0; i < total; i++) {
-    const p = document.createElement("span");
-    p.className = "particle";
-    p.style.background =
-      colors[Math.floor(Math.random() * colors.length)];
-    p.style.left = "50%";
-    p.style.top = "55vh";
-
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * power;
-
-    const x = Math.cos(angle) * speed;
-    const y = Math.sin(angle) * speed + 180; // gravity pull
-
-    p.animate(
-      [
-        { transform: "translate(0,0) scale(1)", opacity: 1 },
-        {
-          transform: `translate(${x}px, ${y}px) scale(0.2)`,
-          opacity: 0
-        }
-      ],
-      {
-        duration: final ? 3200 : 2600,
-        easing: "cubic-bezier(.2,.8,.4,1)"
+  update() {
+    if (!this.exploded) {
+      this.y -= this.speed;
+      if (this.y <= this.targetY) {
+        this.explode();
       }
-    );
-
-    scene.appendChild(p);
-    setTimeout(() => p.remove(), 3400);
+    } else {
+      this.sparks.forEach(s => s.update());
+      this.sparks = this.sparks.filter(s => !s.done);
+    }
   }
+  explode() {
+    this.exploded = true;
+    const sparkCount = 80 + Math.floor(Math.random() * 80);
+    for (let i = 0; i < sparkCount; i++) {
+      const angle = Math.random() * 2 * Math.PI;
+      const speed = 2 + Math.random() * 5;
+      const gravity = 0.06 + Math.random() * 0.03;
+      const color = `hsl(${Math.random()*360},100%,50%)`;
+      this.sparks.push(new Spark(this.x, this.y, speed, angle, gravity, color));
+    }
+  }
+  draw(ctx) {
+    if (!this.exploded) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 4, 0, Math.PI*2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+    } else {
+      this.sparks.forEach(s => s.draw(ctx));
+    }
+  }
+  done() {
+    return this.exploded && this.sparks.length === 0;
+  }
+}
 
-  if (final) showText();
+class Spark {
+  constructor(x, y, speed, angle, gravity, color) {
+    this.x = x;
+    this.y = y;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.gravity = gravity;
+    this.color = color;
+    this.opacity = 1;
+    this.fade = 0.01 + Math.random()*0.02;
+    this.done = false;
+  }
+  update() {
+    this.vy += this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.opacity -= this.fade;
+    if (this.opacity <= 0) this.done = true;
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.opacity;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// Animation loop
+let fireworks = [];
+let rocketCount = 0;
+let textShown = false;
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.15)";
+  ctx.fillRect(0,0,cw,ch);
+
+  fireworks.forEach(f => f.update());
+  fireworks.forEach(f => f.draw(ctx));
+  fireworks = fireworks.filter(f => !f.done());
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Launch fireworks every 2 seconds
+function launchSequence() {
+  rocketCount++;
+  const f = new Firework();
+  fireworks.push(f);
+  if (rocketCount < 5) {
+    setTimeout(launchSequence, 2000);
+  } else {
+    // Final rocket after 2 sec
+    setTimeout(() => {
+      const finalFirework = new Firework();
+      fireworks.push(finalFirework);
+      // Show text after final firework fully explodes (~3 sec)
+      setTimeout(showText, 3000);
+    }, 2000);
+  }
 }
 
 function showText() {
-  text.classList.remove("hidden");
+  const text = document.getElementById('text');
+  const lines = document.querySelectorAll('.line');
+  text.classList.remove('hidden');
   let delay = 0;
-
   lines.forEach(line => {
-    setTimeout(() => line.classList.add("fade-line"), delay);
+    setTimeout(() => {
+      line.classList.add('fade-line');
+    }, delay);
     delay += 2000;
   });
 }
+
+launchSequence();
 </script>
 
 </body>
