@@ -1,198 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sonam Didi</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Happy Birthday Sonam Didi</title>
+<style>
+  html, body {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    background:black;
+    font-family:"Times New Roman", serif;
+    overflow:hidden;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    flex-direction:column;
+  }
+
+  /* Starry background */
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(1px 1px at 80% 40%, white, transparent),
+      radial-gradient(1.5px 1.5px at 50% 70%, white, transparent),
+      radial-gradient(1px 1px at 70% 20%, white, transparent);
+    opacity:0.6;
+    pointer-events:none;
+  }
+
+  /* Fireworks placeholder */
+  #fireworks {
+    width:100%;
+    height:50%;
+    margin-bottom:20px;
+    /* Tumhara existing fireworks code ya canvas yaha replace kar sakte ho */
+  }
+
+  /* Fade-in text */
+  .fade-text {
+    opacity:0;
+    font-size:48px;
+    margin-top:20px;
+    animation: fadeIn 2s forwards;
+    animation-delay:1s; /* 1s ke baad fade-in start */
+  }
+
+  @keyframes fadeIn {
+    to { opacity:1; }
+  }
+</style>
 </head>
 <body>
 
-<canvas id="backgroundCanvas"></canvas>
-<canvas id="fireworksCanvas"></canvas>
-
-<div id="text" class="hidden">
-  <div class="line l1">AND QUIETLY IT BECAME NOW</div>
-  <div class="line l2">Happy Birthday 2000 – 2026</div>
-  <div class="line l3">Sonam Didi ✨</div>
+<div id="fireworks">
+  <!-- Placeholder for fireworks animation -->
 </div>
 
+<div class="fade-text">Happy Birthday Sonam Didi ✨</div>
+<div class="fade-text" style="animation-delay:2s;">2000–2026 🎉</div>
+
 <script>
-const bgCanvas = document.getElementById('backgroundCanvas');
-const bgCtx = bgCanvas.getContext('2d');
-const canvas = document.getElementById('fireworksCanvas');
-const ctx = canvas.getContext('2d');
-let cw, ch;
-
-function resizeCanvas() {
-  cw = window.innerWidth;
-  ch = window.innerHeight;
-  bgCanvas.width = cw;
-  bgCanvas.height = ch;
-  canvas.width = cw;
-  canvas.height = ch;
-  drawStars();
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-function drawStars(){
-  bgCtx.fillStyle="#000";
-  bgCtx.fillRect(0,0,cw,ch);
-  for(let i=0;i<300;i++){
-    const x=Math.random()*cw;
-    const y=Math.random()*ch;
-    const r=Math.random()*1.5;
-    bgCtx.beginPath();
-    bgCtx.arc(x,y,r,0,Math.PI*2);
-    bgCtx.fillStyle="white";
-    bgCtx.fill();
-  }
-  const gradient = bgCtx.createRadialGradient(cw/2,ch/2,cw*0.1,cw/2,ch/2,cw);
-  gradient.addColorStop(0,'rgba(255,255,255,0.03)');
-  gradient.addColorStop(1,'rgba(0,0,0,0.5)');
-  bgCtx.fillStyle=gradient;
-  bgCtx.fillRect(0,0,cw,ch);
-}
-
-// Rocket, Spark, Smoke classes
-class Rocket{
-  constructor(){
-    this.x=Math.random()*(cw*0.8)+cw*0.1;
-    this.y=ch;
-    this.targetY=ch*0.25 + Math.random()*ch*0.15;
-    this.speed=6+Math.random()*3;
-    this.exploded=false;
-    this.smoke=[];
-    this.sparks=[];
-  }
-  update(){
-    if(!this.exploded){
-      this.y -= this.speed;
-      this.smoke.push(new Smoke(this.x,this.y));
-      if(this.y<=this.targetY) this.explode();
-    }
-    this.smoke.forEach(s=>s.update());
-    this.smoke=this.smoke.filter(s=>!s.done);
-    this.sparks.forEach(s=>s.update());
-    this.sparks=this.sparks.filter(s=>!s.done);
-  }
-  explode(){
-    this.exploded=true;
-    const sparkCount=180+Math.floor(Math.random()*70);
-    for(let i=0;i<sparkCount;i++){
-      const angle=Math.random()*Math.PI*2;
-      const speed=3+Math.random()*7;
-      const gravity=0.06+Math.random()*0.03;
-      const color=`hsl(${Math.random()*360},100%,50%)`;
-      this.sparks.push(new Spark(this.x,this.y,speed,angle,gravity,color));
-    }
-  }
-  draw(ctx){
-    if(!this.exploded){
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,6,0,Math.PI*2);
-      ctx.fillStyle="white";
-      ctx.fill();
-    }
-    this.smoke.forEach(s=>s.draw(ctx));
-    this.sparks.forEach(s=>s.draw(ctx));
-  }
-  done(){return this.exploded && this.sparks.length===0;}
-}
-
-class Spark{
-  constructor(x,y,speed,angle,gravity,color){
-    this.x=x; this.y=y;
-    this.vx=Math.cos(angle)*speed;
-    this.vy=Math.sin(angle)*speed;
-    this.gravity=gravity;
-    this.color=color;
-    this.opacity=1;
-    this.fade=0.008+Math.random()*0.02;
-    this.done=false;
-    this.prevPositions=[];
-  }
-  update(){
-    this.vy += this.gravity;
-    this.x += this.vx;
-    this.y += this.vy;
-    this.opacity -= this.fade;
-    this.prevPositions.push({x:this.x, y:this.y});
-    if(this.prevPositions.length>5) this.prevPositions.shift();
-    if(this.opacity<=0) this.done=true;
-  }
-  draw(ctx){
-    ctx.beginPath();
-    ctx.moveTo(this.prevPositions[0]?.x||this.x,this.prevPositions[0]?.y||this.y);
-    for(let i=1;i<this.prevPositions.length;i++){
-      ctx.lineTo(this.prevPositions[i].x,this.prevPositions[i].y);
-    }
-    ctx.strokeStyle=this.color;
-    ctx.shadowColor=this.color;
-    ctx.shadowBlur=8;
-    ctx.globalAlpha=this.opacity;
-    ctx.lineWidth=2;
-    ctx.stroke();
-    ctx.globalAlpha=1;
-  }
-}
-
-class Smoke{
-  constructor(x,y){
-    this.x=x; this.y=y;
-    this.radius=4+Math.random()*3;
-    this.opacity=0.4+Math.random()*0.3;
-    this.fade=0.005+Math.random()*0.005;
-    this.done=false;
-  }
-  update(){this.y-=0.3; this.opacity-=this.fade;if(this.opacity<=0)this.done=true;}
-  draw(ctx){
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-    ctx.fillStyle=`rgba(200,200,200,${this.opacity})`;
-    ctx.fill();
-  }
-}
-
-// Animation loop
-let rockets=[];
-let rocketCount=0;
-
-function animate(){
-  ctx.clearRect(0,0,cw,ch);
-  rockets.forEach(r=>r.update());
-  rockets.forEach(r=>r.draw(ctx));
-  rockets = rockets.filter(r=>!r.done());
-  requestAnimationFrame(animate);
-}
-animate();
-
-// Launch sequence
-function launchSequence(){
-  rocketCount++;
-  rockets.push(new Rocket());
-  if(rocketCount<5){
-    setTimeout(launchSequence,2000);
-  }else{
-    setTimeout(()=>{
-      rockets.push(new Rocket());
-      setTimeout(showText,3500);
-    },2000);
-  }
-}
-
-function showText(){
-  const text = document.getElementById('text');
-  const lines = document.querySelectorAll('.line');
-  text.classList.remove('hidden');
-  let delay=0;
-  lines.forEach(line=>{
-    setTimeout(()=>line.classList.add('fade-line'),delay);
-    delay+=2000;
-  });
-}
-
-launchSequence();
+  // 3 seconds ke baad automatically 2nd page open
+  setTimeout(() => {
+    window.location.href = "party.html";
+  }, 3000);
 </script>
 
 </body>
