@@ -6,49 +6,50 @@ body {
   font-family: "Times New Roman", serif;
 }
 
-/* STAR BACKGROUND */
+/* STAR SKY */
 .stars {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1.5px 1.5px at 10% 20%, white, transparent),
-    radial-gradient(1.5px 1.5px at 30% 80%, white, transparent),
-    radial-gradient(1.5px 1.5px at 70% 40%, white, transparent),
-    radial-gradient(1.5px 1.5px at 90% 70%, white, transparent);
-  background-size: 220px 220px;
-  animation: twinkle 6s infinite alternate;
+    radial-gradient(1.5px 1.5px at 15% 20%, white, transparent),
+    radial-gradient(1.5px 1.5px at 40% 70%, white, transparent),
+    radial-gradient(1.5px 1.5px at 65% 35%, white, transparent),
+    radial-gradient(1.5px 1.5px at 85% 80%, white, transparent);
+  background-size: 240px 240px;
+  animation: twinkle 7s infinite alternate;
 }
 
 @keyframes twinkle {
-  from { opacity: 0.6; }
+  from { opacity: 0.5; }
   to { opacity: 1; }
 }
 
-/* SCENE */
 #scene {
   position: fixed;
   inset: 0;
   pointer-events: none;
 }
 
-/* ROCKET */
+/* BIG ROCKET */
 .rocket {
   position: absolute;
   left: 50%;
   bottom: 0;
-  width: 6px;
-  height: 36px;
-  background: linear-gradient(white, orange);
+  width: 10px;
+  height: 60px;
+  background: linear-gradient(white, orange, red);
+  border-radius: 5px;
   transform: translateX(-50%);
-  border-radius: 3px;
+  box-shadow: 0 0 18px orange;
 }
 
-/* SPARKS */
-.spark {
+/* REALISTIC PARTICLES */
+.particle {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
+  box-shadow: 0 0 18px currentColor;
 }
 
 /* FINAL TEXT */
@@ -62,34 +63,32 @@ body {
   text-align: center;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .line {
   opacity: 0;
-  margin: 10px 0;
+  margin: 14px 0;
 }
 
 .fade-line {
-  animation: fadeInLine 2s ease forwards;
+  animation: fadeIn 2s ease forwards;
 }
 
-@keyframes fadeInLine {
+@keyframes fadeIn {
   to { opacity: 1; }
 }
 
 .l1 {
-  font-size: 48px;
+  font-size: 52px;
   color: gold;
 }
 
 .l2 {
-  font-size: 56px;
+  font-size: 60px;
   color: cyan;
 }
 
 .l3 {
-  font-size: 64px;
+  font-size: 68px;
   color: violet;
 }
