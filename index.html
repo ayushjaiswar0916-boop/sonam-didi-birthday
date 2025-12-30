@@ -4,51 +4,39 @@
 <meta charset="UTF-8">
 <title>Happy Birthday Sonam Didi</title>
 <style>
-html, body {
+html,body{
   margin:0;
   padding:0;
   width:100%;
   height:100%;
   background:black;
-  font-family:"Times New Roman", serif;
   overflow:hidden;
-  color:white;
+  font-family:"Times New Roman", serif;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
   text-align:center;
+  color:white;
 }
-body::before {
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(1px 1px at 80% 40%, white, transparent),
-    radial-gradient(1.5px 1.5px at 50% 70%, white, transparent),
-    radial-gradient(1px 1px at 70% 20%, white, transparent);
-  opacity:0.6;
-  pointer-events:none;
-}
-canvas {
+canvas{
   position:absolute;
   top:0;
   left:0;
 }
-.text1, .text2 {
+.text1,.text2{
   opacity:0;
   position:relative;
   z-index:10;
 }
-.text1 {
+.text1{
   font-size:48px;
   margin-bottom:20px;
 }
-.text2 {
+.text2{
   font-size:36px;
 }
-@keyframes fadeIn { to { opacity:1; } }
+@keyframes fadeIn{to{opacity:1;}}
 </style>
 </head>
 <body>
@@ -58,37 +46,41 @@ canvas {
 <div class="text2">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
 
 <script>
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+function resizeCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
 
-let rockets = [];
-let particles = [];
+let rockets=[];
+let particles=[];
 
 // Rocket class
-class Rocket {
-  constructor() {
-    this.x = Math.random()*canvas.width;
-    this.y = canvas.height;
-    this.speedY = -8 - Math.random()*2;
-    this.color = `hsl(${Math.random()*360},100%,50%)`;
-    this.exploded = false;
+class Rocket{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.speedY=-8-Math.random()*2;
+    this.color=`hsl(${Math.random()*360},100%,50%)`;
+    this.exploded=false;
   }
-  update() {
-    this.y += this.speedY;
-    if(this.y < canvas.height/2 && !this.exploded){
+  update(){
+    this.y+=this.speedY;
+    if(this.y<canvas.height/2 && !this.exploded){
       this.explode();
-      this.exploded = true;
+      this.exploded=true;
     }
   }
-  explode() {
+  explode(){
     for(let i=0;i<50;i++){
       particles.push(new Particle(this.x,this.y,this.color));
     }
   }
-  draw() {
-    ctx.fillStyle = this.color;
+  draw(){
+    ctx.fillStyle=this.color;
     ctx.beginPath();
     ctx.arc(this.x,this.y,4,0,Math.PI*2);
     ctx.fill();
@@ -96,43 +88,43 @@ class Rocket {
 }
 
 // Particle class
-class Particle {
+class Particle{
   constructor(x,y,color){
-    this.x = x;
-    this.y = y;
-    this.speedX = (Math.random()-0.5)*6;
-    this.speedY = (Math.random()-0.5)*6;
-    this.alpha = 1;
-    this.color = color;
+    this.x=x;
+    this.y=y;
+    this.speedX=(Math.random()-0.5)*6;
+    this.speedY=(Math.random()-0.5)*6;
+    this.alpha=1;
+    this.color=color;
   }
   update(){
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.alpha -= 0.02;
+    this.x+=this.speedX;
+    this.y+=this.speedY;
+    this.alpha-=0.02;
   }
   draw(){
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle=this.color;
+    ctx.globalAlpha=this.alpha;
     ctx.beginPath();
     ctx.arc(this.x,this.y,3,0,Math.PI*2);
     ctx.fill();
-    ctx.globalAlpha =1;
+    ctx.globalAlpha=1;
   }
 }
 
 let launchCount=0;
-let rocketInterval = setInterval(()=>{
+let rocketInterval=setInterval(()=>{
   rockets.push(new Rocket());
   launchCount++;
   if(launchCount>=5){
     clearInterval(rocketInterval);
-    // Last rocket fired, wait particles to fade
+    // Last rocket exploded, wait 1.5s then show texts
     setTimeout(showTexts,1500);
   }
 },2000);
 
 function animate(){
-  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fillStyle='rgba(0,0,0,0.2)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   rockets.forEach(r=>{
@@ -140,34 +132,26 @@ function animate(){
     r.draw();
   });
 
-  particles.forEach((p,i)=>{
+  for(let i=particles.length-1;i>=0;i--){
+    let p=particles[i];
     p.update();
     p.draw();
     if(p.alpha<=0) particles.splice(i,1);
-  });
+  }
 
   requestAnimationFrame(animate);
 }
-
 animate();
 
 // Show texts in sequence
 function showTexts(){
-  const t1 = document.querySelector('.text1');
-  const t2 = document.querySelector('.text2');
-
-  t1.style.animation = "fadeIn 2s forwards";
-
-  setTimeout(()=>{
-    t2.style.animation = "fadeIn 2s forwards";
-  },2000); // 2s after first text
-
+  const t1=document.querySelector('.text1');
+  const t2=document.querySelector('.text2');
+  t1.style.animation="fadeIn 2s forwards";
+  setTimeout(()=>{t2.style.animation="fadeIn 2s forwards";},2000);
   // Redirect 5s after second text
-  setTimeout(()=>{
-    window.location.href = "party.html";
-  },7000);
+  setTimeout(()=>{window.location.href="party.html";},7000);
 }
 </script>
-
 </body>
 </html>
