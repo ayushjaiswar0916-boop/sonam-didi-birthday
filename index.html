@@ -34,12 +34,11 @@
     pointer-events:none;
   }
 
-  /* Fireworks placeholder */
+  /* Fireworks container */
   #fireworks {
     width:100%;
     height:50%;
     margin-bottom:20px;
-    /* Replace with your fireworks canvas / code */
   }
 
   /* Fade-in text */
@@ -47,7 +46,6 @@
     opacity:0;
     font-size:48px;
     margin-top:20px;
-    animation: fadeIn 2s forwards;
   }
 
   @keyframes fadeIn {
@@ -61,16 +59,21 @@
   <!-- Fireworks canvas / animation code goes here -->
 </div>
 
-<div class="fade-text" style="animation-delay:2s;">Happy Birthday Sonam Didi ✨</div>
+<div class="fade-text">Happy Birthday Sonam Didi ✨</div>
 
 <script>
-  // Timings
-  let fireworksDuration = 3000; // 3s fireworks
-  let textFadeInDuration = 2000; // 2s text fade-in
-  let extraDelay = 1000; // extra buffer
-  let totalDelay = fireworksDuration + textFadeInDuration + extraDelay;
+  let fireworksDuration = 3000; // 3s
+  let textDelayAfterFireworks = 500; // 0.5s delay
+  let textFadeDuration = 2000; // 2s fade-in
+  let extraDelay = 500; // buffer
+  let totalDelay = fireworksDuration + textDelayAfterFireworks + textFadeDuration + extraDelay;
 
-  // Redirect after animations complete
+  // Text fade-in after fireworks
+  setTimeout(() => {
+    document.querySelector('.fade-text').style.animation = "fadeIn 2s forwards";
+  }, fireworksDuration + textDelayAfterFireworks);
+
+  // Redirect after everything complete
   setTimeout(() => {
     window.location.href = "party.html";
   }, totalDelay);
