@@ -6,40 +6,52 @@ body {
   font-family: "Times New Roman", serif;
 }
 
+/* STAR BACKGROUND */
 .stars {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1px 1px at 10% 20%, white, transparent),
-    radial-gradient(1px 1px at 30% 80%, white, transparent),
-    radial-gradient(1px 1px at 70% 40%, white, transparent),
-    radial-gradient(1px 1px at 90% 70%, white, transparent);
-  background-size: 200px 200px;
+    radial-gradient(1.5px 1.5px at 10% 20%, white, transparent),
+    radial-gradient(1.5px 1.5px at 30% 80%, white, transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, white, transparent),
+    radial-gradient(1.5px 1.5px at 90% 70%, white, transparent);
+  background-size: 220px 220px;
+  animation: twinkle 6s infinite alternate;
 }
 
+@keyframes twinkle {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* SCENE */
 #scene {
   position: fixed;
   inset: 0;
   pointer-events: none;
 }
 
+/* ROCKET */
 .rocket {
   position: absolute;
   left: 50%;
   bottom: 0;
-  width: 4px;
-  height: 20px;
-  background: white;
+  width: 6px;
+  height: 36px;
+  background: linear-gradient(white, orange);
   transform: translateX(-50%);
+  border-radius: 3px;
 }
 
+/* SPARKS */
 .spark {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
+/* FINAL TEXT */
 #text {
   position: fixed;
   inset: 0;
@@ -50,23 +62,34 @@ body {
   text-align: center;
 }
 
-.hide {
+.hidden {
   display: none;
 }
 
-.t1 {
-  font-size: 28px;
+.line {
+  opacity: 0;
+  margin: 10px 0;
+}
+
+.fade-line {
+  animation: fadeInLine 2s ease forwards;
+}
+
+@keyframes fadeInLine {
+  to { opacity: 1; }
+}
+
+.l1 {
+  font-size: 48px;
   color: gold;
-  margin-bottom: 8px;
 }
 
-.t2 {
-  font-size: 32px;
+.l2 {
+  font-size: 56px;
   color: cyan;
-  margin-bottom: 8px;
 }
 
-.t3 {
-  font-size: 36px;
+.l3 {
+  font-size: 64px;
   color: violet;
 }
