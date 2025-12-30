@@ -11,6 +11,7 @@ canvas{
   left:0;
 }
 
+/* TEXT */
 #text{
   position:fixed;
   inset:0;
@@ -36,6 +37,14 @@ canvas{
   to{opacity:1;}
 }
 
-.l1{font-size:52px;color:gold;}
-.l2{font-size:60px;color:cyan;}
-.l3{font-size:68px;color:violet;}
+/* BIGGER, BRIGHTER SPARKS AND ROCKETS */
+.spark{
+  width:4px !important;
+  height:4px !important;
+  border-radius:50%;
+  box-shadow: 0 0 8px #fff, 0 0 12px #fff;
+}
+
+.l1{font-size:72px;color:gold;}
+.l2{font-size:80px;color:cyan;}
+.l3{font-size:88px;color:violet;}
