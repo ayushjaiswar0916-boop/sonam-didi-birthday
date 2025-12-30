@@ -17,93 +17,92 @@
 </div>
 
 <script>
-  const scene = document.getElementById("scene");
-  const text = document.getElementById("text");
-  const lines = document.querySelectorAll(".line");
+const scene = document.getElementById("scene");
+const text = document.getElementById("text");
+const lines = document.querySelectorAll(".line");
 
-  const colors = [
-    "#ff1744", "#ffea00", "#00e5ff",
-    "#76ff03", "#d500f9", "#ff9100"
-  ];
+const colors = [
+  "#ff1744", "#ffd600", "#00e5ff",
+  "#76ff03", "#e040fb", "#ff9100"
+];
 
-  let burstCount = 0;
+let count = 0;
+setTimeout(sequence, 1200);
 
-  // Start animation after page loads
-  setTimeout(startSequence, 1000);
-
-  function startSequence() {
-    if (burstCount < 5) {
-      burstCount++;
-      launchRocket(false);
-      setTimeout(startSequence, 2000); // 🔥 2 seconds gap
-    } else {
-      setTimeout(() => launchRocket(true), 2000); // final rocket
-    }
+function sequence() {
+  if (count < 5) {
+    count++;
+    launch(false);
+    setTimeout(sequence, 2000);
+  } else {
+    setTimeout(() => launch(true), 2000);
   }
+}
 
-  function launchRocket(isFinal) {
-    const rocket = document.createElement("div");
-    rocket.className = "rocket";
-    scene.appendChild(rocket);
+function launch(final) {
+  const rocket = document.createElement("div");
+  rocket.className = "rocket";
+  scene.appendChild(rocket);
 
-    rocket.animate(
-      [{ bottom: "0" }, { bottom: "52vh" }],
-      { duration: 1200, easing: "ease-out" }
+  rocket.animate(
+    [{ bottom: "0" }, { bottom: "55vh" }],
+    { duration: 1400, easing: "cubic-bezier(.4,0,.2,1)" }
+  );
+
+  setTimeout(() => {
+    rocket.remove();
+    explode(final);
+  }, 1400);
+}
+
+function explode(final) {
+  const total = final ? 220 : 140;
+  const power = final ? 420 : 300;
+
+  for (let i = 0; i < total; i++) {
+    const p = document.createElement("span");
+    p.className = "particle";
+    p.style.background =
+      colors[Math.floor(Math.random() * colors.length)];
+    p.style.left = "50%";
+    p.style.top = "55vh";
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * power;
+
+    const x = Math.cos(angle) * speed;
+    const y = Math.sin(angle) * speed + 180; // gravity pull
+
+    p.animate(
+      [
+        { transform: "translate(0,0) scale(1)", opacity: 1 },
+        {
+          transform: `translate(${x}px, ${y}px) scale(0.2)`,
+          opacity: 0
+        }
+      ],
+      {
+        duration: final ? 3200 : 2600,
+        easing: "cubic-bezier(.2,.8,.4,1)"
+      }
     );
 
-    setTimeout(() => {
-      rocket.remove();
-      explode(isFinal);
-    }, 1200);
+    scene.appendChild(p);
+    setTimeout(() => p.remove(), 3400);
   }
 
-  function explode(isFinal) {
-    const sparks = isFinal ? 160 : 90;
-    const distance = isFinal ? 340 : 240;
+  if (final) showText();
+}
 
-    for (let i = 0; i < sparks; i++) {
-      const spark = document.createElement("span");
-      spark.className = "spark";
-      spark.style.background =
-        colors[Math.floor(Math.random() * colors.length)];
-      spark.style.left = "50%";
-      spark.style.top = "52vh";
+function showText() {
+  text.classList.remove("hidden");
+  let delay = 0;
 
-      const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * distance;
-
-      spark.animate(
-        [
-          { transform: "translate(0,0)", opacity: 1 },
-          {
-            transform: `translate(${Math.cos(angle) * dist}px,
-            ${Math.sin(angle) * dist}px)`,
-            opacity: 0
-          }
-        ],
-        { duration: isFinal ? 2400 : 1800, easing: "ease-out" }
-      );
-
-      scene.appendChild(spark);
-      setTimeout(() => spark.remove(), 2600);
-    }
-
-    if (isFinal) {
-      revealText();
-    }
-  }
-
-  function revealText() {
-    text.classList.remove("hidden");
-
-    let delay = 0;
-    lines.forEach(line => {
-      setTimeout(() => {
-        line.classList.add("fade-line");
-      }, delay);
-      delay += 2000; // 🔥 line-by-line fade (2s)
-    });
-  }
+  lines.forEach(line => {
+    setTimeout(() => line.classList.add("fade-line"), delay);
+    delay += 2000;
+  });
+}
 </script>
 
 </body>
