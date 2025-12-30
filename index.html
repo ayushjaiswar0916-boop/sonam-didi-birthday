@@ -10,76 +10,99 @@
 <div class="stars"></div>
 <div id="scene"></div>
 
-<div id="text" class="hide">
-  <div class="t1">And quietly it became now</div>
-  <div class="t2">Happy Birthday 2000 – 2026</div>
-  <div class="t3">Sonam Didi ✨</div>
+<div id="text" class="hidden">
+  <div class="line l1">AND QUIETLY IT BECAME NOW</div>
+  <div class="line l2">Happy Birthday 2000 – 2026</div>
+  <div class="line l3">Sonam Didi ✨</div>
 </div>
 
 <script>
   const scene = document.getElementById("scene");
   const text = document.getElementById("text");
-  const colors = ["red","gold","cyan","lime","violet"];
-  let shots = 0;
+  const lines = document.querySelectorAll(".line");
 
-  setTimeout(startFireworks, 500);
+  const colors = [
+    "#ff1744", "#ffea00", "#00e5ff",
+    "#76ff03", "#d500f9", "#ff9100"
+  ];
 
-  function startFireworks() {
-    const timer = setInterval(() => {
-      shots++;
-      if (shots <= 5) {
-        launch(false);
-      } else {
-        clearInterval(timer);
-        setTimeout(() => launch(true), 800);
-      }
-    }, 900);
+  let burstCount = 0;
+
+  // Start animation after page loads
+  setTimeout(startSequence, 1000);
+
+  function startSequence() {
+    if (burstCount < 5) {
+      burstCount++;
+      launchRocket(false);
+      setTimeout(startSequence, 2000); // 🔥 2 seconds gap
+    } else {
+      setTimeout(() => launchRocket(true), 2000); // final rocket
+    }
   }
 
-  function launch(final) {
+  function launchRocket(isFinal) {
     const rocket = document.createElement("div");
     rocket.className = "rocket";
     scene.appendChild(rocket);
 
     rocket.animate(
-      [{ bottom: "0px" }, { bottom: "50vh" }],
-      { duration: 800, easing: "ease-out" }
+      [{ bottom: "0" }, { bottom: "52vh" }],
+      { duration: 1200, easing: "ease-out" }
     );
 
     setTimeout(() => {
       rocket.remove();
-      explode(final);
-    }, 800);
+      explode(isFinal);
+    }, 1200);
   }
 
-  function explode(final) {
-    const total = final ? 60 : 30;
+  function explode(isFinal) {
+    const sparks = isFinal ? 160 : 90;
+    const distance = isFinal ? 340 : 240;
 
-    for (let i = 0; i < total; i++) {
+    for (let i = 0; i < sparks; i++) {
       const spark = document.createElement("span");
       spark.className = "spark";
-      spark.style.background = colors[Math.floor(Math.random()*colors.length)];
+      spark.style.background =
+        colors[Math.floor(Math.random() * colors.length)];
       spark.style.left = "50%";
-      spark.style.top = "50%";
+      spark.style.top = "52vh";
 
       const angle = Math.random() * Math.PI * 2;
-      const dist = final ? 200 : 120;
+      const dist = Math.random() * distance;
 
       spark.animate(
         [
           { transform: "translate(0,0)", opacity: 1 },
-          { transform: `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`, opacity: 0 }
+          {
+            transform: `translate(${Math.cos(angle) * dist}px,
+            ${Math.sin(angle) * dist}px)`,
+            opacity: 0
+          }
         ],
-        { duration: final ? 1800 : 1200 }
+        { duration: isFinal ? 2400 : 1800, easing: "ease-out" }
       );
 
       scene.appendChild(spark);
-      setTimeout(() => spark.remove(), 1800);
+      setTimeout(() => spark.remove(), 2600);
     }
 
-    if (final) {
-      setTimeout(() => text.classList.remove("hide"), 1200);
+    if (isFinal) {
+      revealText();
     }
+  }
+
+  function revealText() {
+    text.classList.remove("hidden");
+
+    let delay = 0;
+    lines.forEach(line => {
+      setTimeout(() => {
+        line.classList.add("fade-line");
+      }, delay);
+      delay += 2000; // 🔥 line-by-line fade (2s)
+    });
   }
 </script>
 
