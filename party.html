@@ -19,29 +19,21 @@
     flex-direction:column;
   }
 
-  /* Starry background */
-  body::before {
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(2px 2px at 20% 30%, white, transparent),
-      radial-gradient(1px 1px at 80% 40%, white, transparent),
-      radial-gradient(1.5px 1.5px at 50% 70%, white, transparent),
-      radial-gradient(1px 1px at 70% 20%, white, transparent);
-    opacity:0.6;
+  /* Sticker */
+  .sticker {
+    margin-bottom:30px;
   }
 
-  /* Sticker */
   .sticker img {
-    width:160px;
+    width:250px; /* big size */
+    max-width:90%;
     animation: float 3s ease-in-out infinite;
-    margin-bottom:20px;
+    border-radius:20px; /* optional */
   }
 
   @keyframes float {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+    50% { transform: translateY(-15px); }
     100% { transform: translateY(0); }
   }
 
@@ -67,7 +59,7 @@
   button.yes { background: linear-gradient(135deg,#ffb703,#ffd166); }
   button.no { background: linear-gradient(135deg,#8ecae6,#bde0fe); }
 
-  /* Auto fade-in lines */
+  /* Fade-in lines */
   #autoText { margin-top:40px; }
 
   .auto-line {
@@ -75,38 +67,38 @@
     font-size:36px;
     margin:10px 0;
     animation: fadeIn 2s ease forwards;
-    animation-delay:5s;
+    animation-delay:2s; /* first line after 2s */
   }
 
   .auto-line:nth-child(2) {
-    animation-delay:7s;
+    animation-delay:4s; /* second line after 4s */
   }
 
   @keyframes fadeIn { to { opacity:1; } }
 </style>
 </head>
-
 <body>
 
-  <div class="sticker">
-    <img src="cat-sticker.png" alt="Cute Sticker">
-  </div>
+<div class="sticker">
+  <img src="cropped-cat.png" alt="Cute Cat Sticker">
+</div>
 
-  <h1>Party?</h1>
+<h1>Party?</h1>
 
-  <div class="buttons">
-    <button class="yes" onclick="goNext()">Yes 🎉</button>
-    <button class="no" onclick="goNext()">No 🙃</button>
-  </div>
+<div class="buttons">
+  <button class="yes" onclick="goNext()">Yes 🎉</button>
+  <button class="no" onclick="goNext()">No 🙃</button>
+</div>
 
-  <div id="autoText">
-    <div class="auto-line">AND QUIETLY IT BECAME NOW</div>
-    <div class="auto-line">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
-  </div>
+<div id="autoText">
+  <div class="auto-line">AND QUIETLY IT BECAME NOW</div>
+  <div class="auto-line">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
+</div>
 
 <script>
 function goNext() {
-  window.location.href = "memories.html"; // next page
+  // future memories.html page
+  window.location.href = "memories.html";
 }
 </script>
 
