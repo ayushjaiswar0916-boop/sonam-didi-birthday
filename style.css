@@ -1,62 +1,77 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f3e8ff, #ede9fe);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+  background: black;
+  overflow: hidden;
+  font-family: "Times New Roman", serif;
 }
 
-.container {
-  text-align: center;
-  background: white;
-  padding: 40px;
-  border-radius: 18px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-  z-index: 2;
+#stars {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 80% 20%, white, transparent),
+    radial-gradient(1px 1px at 50% 60%, white, transparent),
+    radial-gradient(1px 1px at 70% 80%, white, transparent),
+    radial-gradient(1px 1px at 30% 90%, white, transparent);
+  background-size: 200px 200px;
+  animation: twinkle 6s infinite alternate;
 }
 
-h1 {
-  color: #5b21b6;
-  margin-bottom: 10px;
+@keyframes twinkle {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
 }
 
-h2 {
-  color: #475569;
-  font-weight: 400;
-  margin-bottom: 5px;
-}
-
-h3 {
-  color: #1e293b;
-  margin-bottom: 30px;
-}
-
-.countdown {
-  font-size: 22px;
-  font-weight: 600;
-  color: #5b21b6;
-  letter-spacing: 1px;
-}
-
-#celebration {
+#fireworks {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1;
 }
 
-.float {
+.rocket {
   position: absolute;
-  bottom: -30px;
-  font-size: 24px;
-  animation: floatUp linear forwards;
+  bottom: 0;
+  width: 4px;
+  height: 18px;
+  background: white;
 }
 
-@keyframes floatUp {
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
+.spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+#finalMessage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.line1 {
+  font-size: 28px;
+  color: #ffd93d;
+  margin-bottom: 10px;
+}
+
+.line2 {
+  font-size: 32px;
+  color: #4dd2ff;
+  margin-bottom: 10px;
+}
+
+.line3 {
+  font-size: 36px;
+  color: #c77dff;
 }
