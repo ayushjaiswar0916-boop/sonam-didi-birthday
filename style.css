@@ -1,60 +1,42 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  background: black;
-  font-family: "Times New Roman", serif;
+body{
+  margin:0;
+  overflow:hidden;
+  background:black;
+  font-family:"Times New Roman", serif;
 }
 
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
 }
 
-.stars {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(1.5px 1.5px at 10% 20%, white, transparent),
-    radial-gradient(1.5px 1.5px at 30% 80%, white, transparent),
-    radial-gradient(1.5px 1.5px at 70% 40%, white, transparent),
-    radial-gradient(1.5px 1.5px at 90% 70%, white, transparent);
-  background-size: 220px 220px;
-  animation: twinkle 7s infinite alternate;
+/* TEXT */
+#text{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
 
-@keyframes twinkle {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+.hidden{display:none;}
+
+.line{
+  opacity:0;
+  margin:12px 0;
 }
 
-/* FINAL TEXT */
-#text {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  opacity: 1;
+.fade-line{
+  animation:fadeIn 2s ease forwards;
 }
 
-.hidden { display: none; }
-
-.line {
-  opacity: 0;
-  margin: 14px 0;
+@keyframes fadeIn{
+  to{opacity:1;}
 }
 
-.fade-line {
-  animation: fadeIn 2s ease forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-.l1 { font-size: 52px; color: gold; }
-.l2 { font-size: 60px; color: cyan; }
-.l3 { font-size: 68px; color: violet; }
+.l1{font-size:52px; color:gold;}
+.l2{font-size:60px; color:cyan;}
+.l3{font-size:68px; color:violet;}
