@@ -4,59 +4,58 @@
 <meta charset="UTF-8">
 <title>Happy Birthday Sonam Didi</title>
 <style>
-  html, body {
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    background:black;
-    font-family:"Times New Roman", serif;
-    overflow:hidden;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-  }
-
-  /* Starry background */
-  body::before {
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(2px 2px at 20% 30%, white, transparent),
-      radial-gradient(1px 1px at 80% 40%, white, transparent),
-      radial-gradient(1.5px 1.5px at 50% 70%, white, transparent),
-      radial-gradient(1px 1px at 70% 20%, white, transparent);
-    opacity:0.6;
-    pointer-events:none;
-  }
-
-  canvas {
-    position:absolute;
-    top:0;
-    left:0;
-  }
-
-  .fade-text {
-    opacity:0;
-    font-size:48px;
-    margin-top:20px;
-    z-index:10;
-    position:relative;
-  }
-
-  @keyframes fadeIn {
-    to { opacity:1; }
-  }
+html, body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:black;
+  font-family:"Times New Roman", serif;
+  overflow:hidden;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+}
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 80% 40%, white, transparent),
+    radial-gradient(1.5px 1.5px at 50% 70%, white, transparent),
+    radial-gradient(1px 1px at 70% 20%, white, transparent);
+  opacity:0.6;
+  pointer-events:none;
+}
+canvas {
+  position:absolute;
+  top:0;
+  left:0;
+}
+.text1, .text2 {
+  opacity:0;
+  position:relative;
+  z-index:10;
+}
+.text1 {
+  font-size:48px;
+  margin-bottom:20px;
+}
+.text2 {
+  font-size:36px;
+}
+@keyframes fadeIn { to { opacity:1; } }
 </style>
 </head>
 <body>
 
 <canvas id="canvas"></canvas>
-<div class="fade-text">Happy Birthday Sonam Didi ✨</div>
+<div class="text1">AND QUIETLY IT BECAME NOW</div>
+<div class="text2">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
 
 <script>
 const canvas = document.getElementById('canvas');
@@ -72,8 +71,8 @@ class Rocket {
   constructor() {
     this.x = Math.random()*canvas.width;
     this.y = canvas.height;
-    this.speedY = -7 - Math.random()*3; // fast rocket
-    this.color = `hsl(${Math.random()*360}, 100%, 50%)`;
+    this.speedY = -8 - Math.random()*2;
+    this.color = `hsl(${Math.random()*360},100%,50%)`;
     this.exploded = false;
   }
   update() {
@@ -84,14 +83,14 @@ class Rocket {
     }
   }
   explode() {
-    for(let i=0;i<40;i++){
-      particles.push(new Particle(this.x, this.y, this.color));
+    for(let i=0;i<50;i++){
+      particles.push(new Particle(this.x,this.y,this.color));
     }
   }
   draw() {
     ctx.fillStyle = this.color;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.arc(this.x,this.y,4,0,Math.PI*2);
     ctx.fill();
   }
 }
@@ -101,8 +100,8 @@ class Particle {
   constructor(x,y,color){
     this.x = x;
     this.y = y;
-    this.speedX = (Math.random()-0.5)*5;
-    this.speedY = (Math.random()-0.5)*5;
+    this.speedX = (Math.random()-0.5)*6;
+    this.speedY = (Math.random()-0.5)*6;
     this.alpha = 1;
     this.color = color;
   }
@@ -115,24 +114,25 @@ class Particle {
     ctx.fillStyle = this.color;
     ctx.globalAlpha = this.alpha;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,2,0,Math.PI*2);
+    ctx.arc(this.x,this.y,3,0,Math.PI*2);
     ctx.fill();
     ctx.globalAlpha =1;
   }
 }
 
-// Launch rockets at intervals
 let launchCount=0;
 let rocketInterval = setInterval(()=>{
   rockets.push(new Rocket());
   launchCount++;
-  if(launchCount>=5){ // only 5 rockets
+  if(launchCount>=5){
     clearInterval(rocketInterval);
+    // Last rocket fired, wait particles to fade
+    setTimeout(showTexts,1500);
   }
-},2000); // every 2s
+},2000);
 
 function animate(){
-  ctx.fillStyle = 'rgba(0,0,0,0.2)'; // trailing effect
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   rockets.forEach(r=>{
@@ -151,15 +151,22 @@ function animate(){
 
 animate();
 
-// Text fade-in after fireworks
-setTimeout(()=>{
-  document.querySelector('.fade-text').style.animation = "fadeIn 2s forwards";
-}, 7000); // approx after rockets+particles
+// Show texts in sequence
+function showTexts(){
+  const t1 = document.querySelector('.text1');
+  const t2 = document.querySelector('.text2');
 
-// Redirect to party page
-setTimeout(()=>{
-  window.location.href = "party.html";
-}, 10000); // 10s after start
+  t1.style.animation = "fadeIn 2s forwards";
+
+  setTimeout(()=>{
+    t2.style.animation = "fadeIn 2s forwards";
+  },2000); // 2s after first text
+
+  // Redirect 5s after second text
+  setTimeout(()=>{
+    window.location.href = "party.html";
+  },7000);
+}
 </script>
 
 </body>
