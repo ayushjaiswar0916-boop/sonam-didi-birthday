@@ -3,23 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <title>Party?</title>
-<link rel="stylesheet" href="party.css">
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: black;
+    color: white;
+    font-family: "Times New Roman", serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 64px;
+    margin-bottom: 30px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 20px;
+  }
+
+  button {
+    padding: 14px 32px;
+    font-size: 22px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+
+  button.yes { background: yellow; color:black; }
+  button.no { background: cyan; color:black; }
+</style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Party?</h1>
+<h1>Party?</h1>
 
-  <div class="buttons">
-    <button class="yes">Yes 🎉</button>
-    <button class="no">No 🙃</button>
-  </div>
-
-  <!-- Fade-in lines test -->
-  <div id="autoText">
-    <div class="auto-line">AND QUIETLY IT BECAME NOW</div>
-    <div class="auto-line">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
-  </div>
+<div class="buttons">
+  <button class="yes">Yes 🎉</button>
+  <button class="no">No 🙃</button>
 </div>
 
 </body>
