@@ -6,25 +6,18 @@ body {
   font-family: "Times New Roman", serif;
 }
 
-#stars {
+.stars {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1px 1px at 20% 30%, white, transparent),
-    radial-gradient(1px 1px at 80% 20%, white, transparent),
-    radial-gradient(1px 1px at 50% 60%, white, transparent),
-    radial-gradient(1px 1px at 70% 80%, white, transparent),
-    radial-gradient(1px 1px at 30% 90%, white, transparent);
+    radial-gradient(1px 1px at 10% 20%, white, transparent),
+    radial-gradient(1px 1px at 30% 80%, white, transparent),
+    radial-gradient(1px 1px at 70% 40%, white, transparent),
+    radial-gradient(1px 1px at 90% 70%, white, transparent);
   background-size: 200px 200px;
-  animation: twinkle 6s infinite alternate;
 }
 
-@keyframes twinkle {
-  from { opacity: 0.6; }
-  to { opacity: 1; }
-}
-
-#fireworks {
+#scene {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -32,10 +25,12 @@ body {
 
 .rocket {
   position: absolute;
+  left: 50%;
   bottom: 0;
   width: 4px;
-  height: 18px;
+  height: 20px;
   background: white;
+  transform: translateX(-50%);
 }
 
 .spark {
@@ -45,7 +40,7 @@ body {
   border-radius: 50%;
 }
 
-#finalMessage {
+#text {
   position: fixed;
   inset: 0;
   display: flex;
@@ -55,23 +50,23 @@ body {
   text-align: center;
 }
 
-.hidden {
+.hide {
   display: none;
 }
 
-.line1 {
+.t1 {
   font-size: 28px;
-  color: #ffd93d;
-  margin-bottom: 10px;
+  color: gold;
+  margin-bottom: 8px;
 }
 
-.line2 {
+.t2 {
   font-size: 32px;
-  color: #4dd2ff;
-  margin-bottom: 10px;
+  color: cyan;
+  margin-bottom: 8px;
 }
 
-.line3 {
+.t3 {
   font-size: 36px;
-  color: #c77dff;
+  color: violet;
 }
