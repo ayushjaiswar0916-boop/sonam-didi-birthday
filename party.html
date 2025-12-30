@@ -25,10 +25,10 @@
   }
 
   .sticker img {
-    width:250px; /* big size */
+    width:250px; 
     max-width:90%;
     animation: float 3s ease-in-out infinite;
-    border-radius:20px; /* optional */
+    border-radius:20px;
   }
 
   @keyframes float {
@@ -52,55 +52,4 @@
     padding:14px 32px;
     font-size:22px;
     border:none;
-    border-radius:30px;
-    cursor:pointer;
-  }
-
-  button.yes { background: linear-gradient(135deg,#ffb703,#ffd166); }
-  button.no { background: linear-gradient(135deg,#8ecae6,#bde0fe); }
-
-  /* Fade-in lines */
-  #autoText { margin-top:40px; }
-
-  .auto-line {
-    opacity:0;
-    font-size:36px;
-    margin:10px 0;
-    animation: fadeIn 2s ease forwards;
-    animation-delay:2s; /* first line after 2s */
-  }
-
-  .auto-line:nth-child(2) {
-    animation-delay:4s; /* second line after 4s */
-  }
-
-  @keyframes fadeIn { to { opacity:1; } }
-</style>
-</head>
-<body>
-
-<div class="sticker">
-  <img src="cropped-cat.png" alt="Cute Cat Sticker">
-</div>
-
-<h1>Party?</h1>
-
-<div class="buttons">
-  <button class="yes" onclick="goNext()">Yes 🎉</button>
-  <button class="no" onclick="goNext()">No 🙃</button>
-</div>
-
-<div id="autoText">
-  <div class="auto-line">AND QUIETLY IT BECAME NOW</div>
-  <div class="auto-line">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
-</div>
-
-<script>
-function goNext() {
-  // future memories.html page
-  window.location.href = "memories.html";
-}
-</script>
-
-</body>
-</html>
+    border-radius
