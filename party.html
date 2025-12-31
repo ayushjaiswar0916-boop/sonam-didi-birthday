@@ -4,88 +4,41 @@
 <meta charset="UTF-8">
 <title>Party?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="stylesheet" href="style.css">
 <style>
-body{
-  margin:0;
-  height:100vh;
-  background: radial-gradient(circle at top, #0b0b18, #000);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Segoe UI', sans-serif;
-  color:white;
-}
-
-.container{
-  text-align:center;
-}
-
-img{
-  width:260px;
-}
-
-h1{
-  font-size:26px;
-  margin:20px 0;
-}
-
-.buttons{
-  display:flex;
-  gap:20px;
-  justify-content:center;
-}
-
-button{
-  padding:14px 30px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-  animation:bounce 1.6s infinite;
-}
-
-.yes{ background:#00ff9c; }
-.no{ background:#ff4d6d; color:white; }
-
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
-}
+body{margin:0;height:100vh;background:#000;display:flex;justify-content:center;align-items:center;font-family:sans-serif;color:white;text-align:center;}
+.container{z-index:2;}
+.container img{width:260px;margin:15px auto;}
+h1{font-size:24px;margin:20px 0;}
+button{padding:14px 30px;margin:10px;font-size:18px;border:none;border-radius:25px;cursor:pointer;}
+.yes{background:#00ff9c;}
+.no{background:#ff4d6d;color:white;}
 </style>
 </head>
-
 <body>
 
 <div class="container">
   <img src="cat.png" alt="Cat">
-
-  <h1>
-    Will you give me Party?<br>
-    Then I’ll show you more pages 😼✨
-  </h1>
-
-  <div class="buttons">
-    <button class="yes">Yes 😸</button>
-    <button class="no" onclick="goToDare()">No 🙀</button>
-  </div>
+  <h1>Will you give me Party? Then I'll show you more pages 😼✨</h1>
+  <button class="yes" onclick="goYes()">Yes 😸</button>
+  <button class="no" onclick="goNo()">No 🙀</button>
 </div>
 
-<!-- Music (starts on NO click) -->
-<audio id="bgm">
-  <source src="funny-song.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgm" src="funny-song.mp3" loop></audio>
 
 <script>
-function goToDare(){
+function goYes(){
+  alert("Yay! Let's continue 🎉"); // Or redirect to next page
+}
+
+function goNo(){
   const music = document.getElementById("bgm");
   music.play().then(()=>{
-    window.location.href = "how-dare-you.html";
+    window.location.href="how-dare-you.html";
   }).catch(()=>{
-    window.location.href = "how-dare-you.html";
+    window.location.href="how-dare-you.html";
   });
 }
 </script>
-
 </body>
 </html>
