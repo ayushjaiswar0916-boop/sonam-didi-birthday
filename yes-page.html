@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Gift!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:sans-serif;
+  color:white;
+  text-align:center;
+  overflow:hidden;
+}
 
+/* soft fog background */
+.fog{
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:url("https://i.imgur.com/8KQkZ8B.png");
+  opacity:0.1;
+  animation:fogMove 60s linear infinite;
+  z-index:0;
+}
+
+@keyframes fogMove{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+
+.container{
+  position:relative;
+  z-index:1;
+}
+
+img{
+  margin:15px auto;
+}
+
+#catSticker{
+  width:350px;
+}
+
+#giftBox{
+  width:200px;
+  margin:20px auto;
+  cursor:pointer;
+  position:relative;
+  z-index:2;
+}
+
+/* text */
+h1{
+  font-size:32px;
+  color:#ffcc00;
+  margin:15px 0;
+}
+
+/* sparkles */
+.sparkle {
+  position:absolute;
+  width:8px;
+  height:8px;
+  background:yellow;
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+  animation: sparkleAnim 1s linear forwards;
+}
+
+@keyframes sparkleAnim{
+  0% {opacity:1; transform:translate(0,0) scale(1);}
+  50% {opacity:1; transform:translate(var(--x), var(--y)) scale(1.5);}
+  100% {opacity:0; transform:translate(var(--x), var(--y)) scale(0);}
+}
+
+/* button */
+button{
+  margin-top:20px;
+  padding:16px 32px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  background:#00ff9c;
+  cursor:pointer;
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="fog"></div>
+
+<div class="container">
+  <img id="catSticker" src="cat-cake.png" alt="Cat with Cake">
+  <h1>Here's a Gift For You 🎁</h1>
+  <img id="giftBox" src="gift-box.png" alt="Gift Box">
+  <button onclick="openGift()">Open Gift 🎉</button>
+</div>
+
+<!-- Music -->
+<audio id="bgm" src="yes-music.mp3" loop autoplay></audio>
+<audio id="giftSound" src="gift-sound.mp3"></audio> <!-- Optional surprise sound -->
+
+<script>
+window.onload = function(){
+  const music = document.getElementById("bgm");
+  music.play().catch(()=>{console.log("User interaction required to play audio");});
+}
+
+// Open gift: sparkle effect + sound
+function openGift(){
+  const giftSound = document.getElementById("giftSound");
+  giftSound.play();
+  createSparkles();
+  // Optional: redirect after 3 seconds
+  // setTimeout(()=>{ window.location.href="next-page.html"; },3000);
+}
+
+function createSparkles(){
+  const gift = document.getElementById("giftBox");
+  for(let i=0;i<20;i++){
+    const sparkle = document.createElement("div");
+    sparkle.classList.add("sparkle");
+    const x = (Math.random()-0.5)*200 + "px";
+    const y = (Math.random()-0.5)*200 + "px";
+    sparkle.style.setProperty('--x', x);
+    sparkle.style.setProperty('--y', y);
+    gift.parentElement.appendChild(sparkle);
+    setTimeout(()=>{ sparkle.remove(); },1000);
+  }
+}
+</script>
+
+</body>
+</html>
