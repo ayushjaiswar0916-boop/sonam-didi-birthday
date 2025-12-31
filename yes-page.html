@@ -63,7 +63,7 @@ h1{
   margin:15px 0;
 }
 
-/* sparkles */
+/* sparkles/confetti */
 .sparkle {
   position:absolute;
   width:8px;
@@ -105,7 +105,7 @@ button{
   <button onclick="openGift()">Open Gift 🎉</button>
 </div>
 
-<!-- Music -->
+<!-- Background music -->
 <audio id="bgm" src="yes-music.mp3" loop autoplay></audio>
 <audio id="giftSound" src="gift-sound.mp3"></audio> <!-- Optional surprise sound -->
 
@@ -115,26 +115,34 @@ window.onload = function(){
   music.play().catch(()=>{console.log("User interaction required to play audio");});
 }
 
-// Open gift: sparkle effect + sound
+// Open gift: sparkles/confetti + sound + redirect
 function openGift(){
   const giftSound = document.getElementById("giftSound");
   giftSound.play();
   createSparkles();
-  // Optional: redirect after 3 seconds
-  // setTimeout(()=>{ window.location.href="next-page.html"; },3000);
+
+  // Redirect after 3 seconds to next page
+  setTimeout(()=>{
+    window.location.href="next-page.html"; // Replace with your next page
+  },3000);
 }
 
+// Sparkle/confetti effect function
 function createSparkles(){
   const gift = document.getElementById("giftBox");
-  for(let i=0;i<20;i++){
+  for(let i=0;i<30;i++){
     const sparkle = document.createElement("div");
     sparkle.classList.add("sparkle");
-    const x = (Math.random()-0.5)*200 + "px";
-    const y = (Math.random()-0.5)*200 + "px";
+    // Random direction and distance
+    const x = (Math.random()-0.5)*250 + "px";
+    const y = (Math.random()-0.5)*250 + "px";
+    // Random color for confetti
+    const colors = ["#ff0","#f0f","#0ff","#f90","#0f0","#fff"];
+    sparkle.style.background = colors[Math.floor(Math.random()*colors.length)];
     sparkle.style.setProperty('--x', x);
     sparkle.style.setProperty('--y', y);
     gift.parentElement.appendChild(sparkle);
-    setTimeout(()=>{ sparkle.remove(); },1000);
+    setTimeout(()=>{ sparkle.remove(); },1200);
   }
 }
 </script>
