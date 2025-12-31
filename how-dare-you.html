@@ -4,12 +4,38 @@
 <meta charset="UTF-8">
 <title>How Dare You</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
 <style>
-body{margin:0;height:100vh;background:#110000;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:sans-serif;color:white;text-align:center;}
-img{width:220px;margin:10px;}
-h1{font-size:28px;color:#ff4d4d;margin:10px 0;}
-button{margin-top:20px;padding:12px 28px;font-size:18px;border:none;border-radius:25px;background:#ff4d4d;color:white;cursor:pointer;}
+body{
+  margin:0;
+  height:100vh;
+  background:#110000;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:sans-serif;
+  color:white;
+  text-align:center;
+}
+img{
+  width:320px; /* Bigger sticker */
+  margin:15px;
+}
+h1{
+  font-size:32px;
+  color:#ff4d4d;
+  margin:15px 0;
+}
+button{
+  margin-top:25px;
+  padding:16px 32px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  background:#ff4d4d;
+  color:white;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -20,9 +46,15 @@ button{margin-top:20px;padding:12px 28px;font-size:18px;border:none;border-radiu
 <br>
 <button onclick="goBack()">I’ll give you party 😿</button>
 
-<audio id="bgm" src="funny-song.mp3" loop autoplay></audio>
+<audio id="bgm" src="funny-song.mp3" loop></audio>
 
 <script>
+window.onload = function(){
+  // Play music on page load (works because user clicked NO on previous page)
+  const music = document.getElementById("bgm");
+  music.play().catch(()=>{console.log("User interaction required to play audio");});
+}
+
 function goBack(){
   const music = document.getElementById("bgm");
   music.pause();
