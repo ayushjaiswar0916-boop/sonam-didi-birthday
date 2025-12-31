@@ -4,17 +4,73 @@
 <meta charset="UTF-8">
 <title>Party Page</title>
 <style>
+/* Full page style */
 html,body{margin:0;padding:0;width:100%;height:100%;background:black;overflow:hidden;font-family:'Poppins',sans-serif;color:white;}
+
+/* Starry + foggy background */
 #stars, #fog{position:absolute; inset:0;}
-#fog{background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);animation:fog 40s linear infinite;pointer-events:none;}
+#fog{
+  background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),
+             radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);
+  animation:fog 40s linear infinite;
+  pointer-events:none;
+}
 @keyframes fog{from{transform:translateX(0);}to{transform:translateX(-400px);}}
-#box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+
+/* Content box */
+#box{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+}
 #box h1{font-size:42px;margin-bottom:20px;}
-button{padding:12px 25px;font-size:20px;margin:10px;border:none;border-radius:10px;cursor:pointer;transition:0.3s;}
-button#yes{background:#4caf50;color:white;} button#no{background:#f44336;color:white;}
-button:hover{transform:scale(1.1);}
+
+/* Sticker */
+#sticker{
+  width:300px; /* bigger sticker */
+  margin-bottom:20px;
+  transition: transform 0.3s ease;
+}
+#sticker:hover{
+  transform: scale(1.05) rotate(-5deg);
+}
+
+/* Buttons */
+button{
+  padding:14px 30px;
+  font-size:22px;
+  margin:12px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+/* Hover bounce */
+button#yes:hover, button#no:hover{
+  animation: bounce 0.6s;
+}
+@keyframes bounce{
+  0%{transform: translateY(0);}
+  30%{transform: translateY(-15px);}
+  50%{transform: translateY(0);}
+  70%{transform: translateY(-8px);}
+  100%{transform: translateY(0);}
+}
+
+/* Click jiggle */
+button.click{
+  animation: jiggle 0.3s;
+}
+@keyframes jiggle{
+  0%{transform: rotate(0deg);}
+  25%{transform: rotate(-15deg);}
+  50%{transform: rotate(10deg);}
+  75%{transform: rotate(-10deg);}
+  100%{transform: rotate(0deg);}
+}
+
+/* Countdown text */
 #countdown{margin-top:20px;font-size:22px;opacity:0.8;}
-#sticker{width:200px;margin-bottom:20px;}
 </style>
 </head>
 <body>
@@ -33,6 +89,7 @@ button:hover{transform:scale(1.1);}
 </div>
 
 <script>
+// Star animation
 const starCanvas=document.getElementById("stars");
 const sctx=starCanvas.getContext("2d");
 function resize(){ starCanvas.width=innerWidth; starCanvas.height=innerHeight; }
@@ -43,20 +100,40 @@ function drawStars(){ sctx.clearRect(0,0,innerWidth,innerHeight); sctx.fillStyle
 function animateStars(){ drawStars(); requestAnimationFrame(animateStars); }
 animateStars();
 
-/* BUTTON + COUNTDOWN */
-let countdown=10;
-const countdownText=document.getElementById("countdown");
+// Button click sound + jiggle
+const clickAudio = new Audio();
+clickAudio.src = "https://www.soundjay.com/buttons/sounds/button-16.mp3";
+
 const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
-const interval=setInterval(()=>{
+
+function playClickEffect(btn){
+  btn.classList.add("click");
+  clickAudio.currentTime = 0;
+  clickAudio.play();
+  setTimeout(()=>btn.classList.remove("click"),300);
+}
+
+yesBtn.addEventListener("click", ()=>{
+  playClickEffect(yesBtn);
+  alert("Yay! Party Time 🎉");
+});
+noBtn.addEventListener("click", ()=>{
+  playClickEffect(noBtn);
+  alert("Oh! Maybe next time 😅");
+});
+
+// Countdown 10 sec → auto Yes
+let countdown = 10;
+const countdownText = document.getElementById("countdown");
+const interval = setInterval(()=>{
   countdown--;
-  countdownText.textContent=`${countdown} seconds remaining...`;
-  if(countdown<=0){ clearInterval(interval); yesAction(); }
+  countdownText.textContent = `${countdown} seconds remaining...`;
+  if(countdown<=0){
+    clearInterval(interval);
+    yesBtn.click(); // auto click Yes button
+  }
 },1000);
-function yesAction(){ alert("Yay! Party Time 🎉"); }
-function noAction(){ alert("Oh! Maybe next time 😅"); }
-yesBtn.addEventListener("click",yesAction);
-noBtn.addEventListener("click",noAction);
 </script>
 
 </body>
