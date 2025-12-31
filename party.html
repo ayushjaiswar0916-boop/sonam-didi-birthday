@@ -4,92 +4,32 @@
 <meta charset="UTF-8">
 <title>Party Page</title>
 <style>
-/* Full page style */
-html,body{margin:0;padding:0;width:100%;height:100%;background:black;overflow:hidden;font-family:'Poppins',sans-serif;color:white;}
-
-/* Starry + foggy background */
+html,body{margin:0;padding:0;width:100%;height:100%;background:black;font-family:'Poppins',sans-serif;color:white;overflow:hidden;}
 #stars, #fog{position:absolute; inset:0;}
-#fog{
-  background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),
-             radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);
-  animation:fog 40s linear infinite;
-  pointer-events:none;
-}
+#fog{background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);animation:fog 40s linear infinite;pointer-events:none;}
 @keyframes fog{from{transform:translateX(0);}to{transform:translateX(-400px);}}
-
-/* Content box */
-#box{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-}
+#box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
 #box h1{font-size:42px;margin-bottom:20px;}
-
-/* Sticker */
-#sticker{
-  width:300px; /* bigger sticker */
-  margin-bottom:20px;
-  transition: transform 0.3s ease;
-}
-#sticker:hover{
-  transform: scale(1.05) rotate(-5deg);
-}
-
-/* Buttons */
-button{
-  padding:14px 30px;
-  font-size:22px;
-  margin:12px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
-}
-/* Hover bounce */
-button#yes:hover, button#no:hover{
-  animation: bounce 0.6s;
-}
-@keyframes bounce{
-  0%{transform: translateY(0);}
-  30%{transform: translateY(-15px);}
-  50%{transform: translateY(0);}
-  70%{transform: translateY(-8px);}
-  100%{transform: translateY(0);}
-}
-
-/* Click jiggle */
-button.click{
-  animation: jiggle 0.3s;
-}
-@keyframes jiggle{
-  0%{transform: rotate(0deg);}
-  25%{transform: rotate(-15deg);}
-  50%{transform: rotate(10deg);}
-  75%{transform: rotate(-10deg);}
-  100%{transform: rotate(0deg);}
-}
-
-/* Countdown text */
-#countdown{margin-top:20px;font-size:22px;opacity:0.8;}
+button{padding:14px 30px;font-size:22px;margin:12px;border:none;border-radius:12px;cursor:pointer;transition: all 0.2s ease;box-shadow: 0 5px 15px rgba(0,0,0,0.3);position: relative;}
+button:hover{animation:bounce 0.6s;}
+@keyframes bounce{0%{transform: translateY(0);}30%{transform: translateY(-15px);}50%{transform: translateY(0);}70%{transform: translateY(-8px);}100%{transform: translateY(0);}}
+button.click{animation:jiggle 0.3s;}
+@keyframes jiggle{0%{transform: rotate(0deg);}25%{transform: rotate(-15deg);}50%{transform: rotate(10deg);}75%{transform: rotate(-10deg);}100%{transform: rotate(0deg);}}
 </style>
 </head>
 <body>
-
 <canvas id="stars"></canvas>
 <div id="fog"></div>
-
 <div id="box">
-  <img id="sticker" src="cat.png" alt="cat sticker">
-  <h1>Will you give me a Party? 😼</h1>
+  <h1>Will you give me a party? 😼</h1>
   <div>
     <button id="yes">Yes</button>
     <button id="no">No</button>
   </div>
-  <div id="countdown">10 seconds remaining...</div>
 </div>
 
 <script>
-// Star animation
+// Stars
 const starCanvas=document.getElementById("stars");
 const sctx=starCanvas.getContext("2d");
 function resize(){ starCanvas.width=innerWidth; starCanvas.height=innerHeight; }
@@ -100,9 +40,8 @@ function drawStars(){ sctx.clearRect(0,0,innerWidth,innerHeight); sctx.fillStyle
 function animateStars(){ drawStars(); requestAnimationFrame(animateStars); }
 animateStars();
 
-// Button click sound + jiggle
-const clickAudio = new Audio();
-clickAudio.src = "https://www.soundjay.com/buttons/sounds/button-16.mp3";
+// Button sound
+const clickAudio = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
 
 const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
@@ -118,23 +57,12 @@ yesBtn.addEventListener("click", ()=>{
   playClickEffect(yesBtn);
   alert("Yay! Party Time 🎉");
 });
+
 noBtn.addEventListener("click", ()=>{
   playClickEffect(noBtn);
-  alert("Oh! Maybe next time 😅");
+  // Redirect to How Dare You page
+  setTimeout(()=>{ window.location.href="how-dare-you.html"; }, 300);
 });
-
-// Countdown 10 sec → auto Yes
-let countdown = 10;
-const countdownText = document.getElementById("countdown");
-const interval = setInterval(()=>{
-  countdown--;
-  countdownText.textContent = `${countdown} seconds remaining...`;
-  if(countdown<=0){
-    clearInterval(interval);
-    yesBtn.click(); // auto click Yes button
-  }
-},1000);
 </script>
-
 </body>
 </html>
