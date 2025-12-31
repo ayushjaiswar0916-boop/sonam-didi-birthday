@@ -16,12 +16,31 @@ body{
   font-family:sans-serif;
   color:white;
   text-align:center;
+  overflow:hidden;
 }
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+img#sticker{
+  width:300px; /* Bigger sticker */
+  margin-bottom:20px;
+  animation: fadeIn 2s ease forwards;
+}
+
 h1{
-  font-size:32px;
+  font-size:36px;
   margin-bottom:30px;
   color:#ffcc00;
+  animation: fadeIn 2s ease forwards;
+  animation-delay: 1s;
+  opacity:0;
+  animation-fill-mode: forwards;
 }
+
 button{
   margin:10px;
   padding:16px 32px;
@@ -31,25 +50,24 @@ button{
   background:#00ff9c;
   cursor:pointer;
   font-weight:bold;
+  transition: transform 0.3s;
 }
+
 button:hover{
   transform:scale(1.1);
-  transition:0.3s;
 }
 </style>
 </head>
 <body>
 
+<!-- Sticker -->
+<img id="sticker" src="cat.png" alt="Cat Sticker">
+
 <h1>Will you give me Party? Then I'll show you more pages 😼✨</h1>
 
 <!-- Buttons -->
-<button class="yes" onclick="window.location.href='yes-page.html'">
-  Yes 😸
-</button>
-
-<button class="no" onclick="window.location.href='how-dare-you.html'">
-  No 😿
-</button>
+<button class="yes" onclick="window.location.href='yes-page.html'">Yes 😸</button>
+<button class="no" onclick="window.location.href='how-dare-you.html'">No 😿</button>
 
 </body>
 </html>
