@@ -4,70 +4,17 @@
 <meta charset="UTF-8">
 <title>Party Page</title>
 <style>
-html,body{
-  margin:0; padding:0;
-  width:100%; height:100%;
-  background:black; overflow:hidden;
-  font-family:'Poppins', sans-serif;
-  color:white;
-}
-
-/* STARRY + FOGGY background */
-#stars, #fog{ position:absolute; inset:0; }
-#fog{
-  background:
-    radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),
-    radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);
-  animation:fog 40s linear infinite;
-  pointer-events:none;
-}
-@keyframes fog{
-  from{transform:translateX(0);}
-  to{transform:translateX(-400px);}
-}
-
-/* CENTER BOX */
-#box{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-#box h1{
-  font-size:42px;
-  margin-bottom:20px;
-}
-
-/* BUTTONS */
-button{
-  padding:12px 25px;
-  font-size:20px;
-  margin:10px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.3s;
-}
-button#yes{ background:#4caf50; color:white; }
-button#no{ background:#f44336; color:white; }
-button:hover{ transform:scale(1.1); }
-
-/* COUNTDOWN TEXT */
-#countdown{
-  margin-top:20px;
-  font-size:22px;
-  opacity:0.8;
-}
-
-/* STICKER IMAGE */
-#sticker{
-  width:200px;
-  margin-bottom:20px;
-}
+html,body{margin:0;padding:0;width:100%;height:100%;background:black;overflow:hidden;font-family:'Poppins',sans-serif;color:white;}
+#stars, #fog{position:absolute; inset:0;}
+#fog{background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);animation:fog 40s linear infinite;pointer-events:none;}
+@keyframes fog{from{transform:translateX(0);}to{transform:translateX(-400px);}}
+#box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+#box h1{font-size:42px;margin-bottom:20px;}
+button{padding:12px 25px;font-size:20px;margin:10px;border:none;border-radius:10px;cursor:pointer;transition:0.3s;}
+button#yes{background:#4caf50;color:white;} button#no{background:#f44336;color:white;}
+button:hover{transform:scale(1.1);}
+#countdown{margin-top:20px;font-size:22px;opacity:0.8;}
+#sticker{width:200px;margin-bottom:20px;}
 </style>
 </head>
 <body>
@@ -86,52 +33,28 @@ button:hover{ transform:scale(1.1); }
 </div>
 
 <script>
-/* ===== STARS ===== */
 const starCanvas=document.getElementById("stars");
 const sctx=starCanvas.getContext("2d");
 function resize(){ starCanvas.width=innerWidth; starCanvas.height=innerHeight; }
 resize(); window.onresize=resize;
 let stars=[];
-for(let i=0;i<200;i++){
-  stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5});
-}
-function drawStars(){
-  sctx.clearRect(0,0,innerWidth,innerHeight);
-  sctx.fillStyle="white";
-  stars.forEach(s=>{
-    sctx.beginPath();
-    sctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    sctx.fill();
-  });
-}
+for(let i=0;i<200;i++) stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5});
+function drawStars(){ sctx.clearRect(0,0,innerWidth,innerHeight); sctx.fillStyle="white"; stars.forEach(s=>{sctx.beginPath();sctx.arc(s.x,s.y,s.r,0,Math.PI*2);sctx.fill();}); }
 function animateStars(){ drawStars(); requestAnimationFrame(animateStars); }
 animateStars();
 
-/* ===== BUTTON + COUNTDOWN LOGIC ===== */
+/* BUTTON + COUNTDOWN */
 let countdown=10;
 const countdownText=document.getElementById("countdown");
 const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
-
 const interval=setInterval(()=>{
   countdown--;
   countdownText.textContent=`${countdown} seconds remaining...`;
-  if(countdown<=0){
-    clearInterval(interval);
-    yesAction();
-  }
+  if(countdown<=0){ clearInterval(interval); yesAction(); }
 },1000);
-
-function yesAction(){
-  alert("Yay! Party Time 🎉"); // change to your next action
-  // window.location.href="nextpage.html"; // optional next redirect
-}
-
-function noAction(){
-  alert("Oh! Maybe next time 😅");
-  // window.location.href="index.html"; // optional redirect back
-}
-
+function yesAction(){ alert("Yay! Party Time 🎉"); }
+function noAction(){ alert("Oh! Maybe next time 😅"); }
 yesBtn.addEventListener("click",yesAction);
 noBtn.addEventListener("click",noAction);
 </script>
