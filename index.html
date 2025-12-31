@@ -14,18 +14,23 @@ html,body{
   font-family:"Times New Roman", serif;
 }
 
-/* 🌟 STARS */
+/* ✨ STAR FIELD (TWINKLING) */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background:
-    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 30% 60%, #fff, transparent),
-    radial-gradient(2px 2px at 70% 40%, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 80% 75%, #fff, transparent);
-  opacity:0.7;
+    radial-gradient(1px 1px at 15% 25%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 35% 65%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 40%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 75%, #fff, transparent);
+  opacity:0.75;
+  animation:twinkle 6s infinite alternate;
   z-index:0;
+}
+@keyframes twinkle{
+  from{opacity:0.4}
+  to{opacity:0.8}
 }
 
 /* 🌫️ FOG */
@@ -33,13 +38,13 @@ body::after{
   content:"";
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at 50% 80%, rgba(255,255,255,0.08), transparent 70%);
-  animation:fog 14s linear infinite;
+  background:radial-gradient(circle at 50% 85%, rgba(255,255,255,0.09), transparent 70%);
+  animation:fogMove 16s linear infinite;
   z-index:1;
 }
-@keyframes fog{
+@keyframes fogMove{
   0%{transform:translateX(0)}
-  50%{transform:translateX(-50px)}
+  50%{transform:translateX(-70px)}
   100%{transform:translateX(0)}
 }
 
@@ -49,6 +54,7 @@ canvas{
   z-index:2;
 }
 
+/* 🎉 TEXT */
 .text1,.text2{
   position:absolute;
   width:100%;
@@ -57,7 +63,6 @@ canvas{
   opacity:0;
   z-index:3;
 }
-
 .text1{ top:40%; font-size:48px; }
 .text2{ top:52%; font-size:36px; }
 
@@ -78,7 +83,7 @@ const c=document.getElementById("c"),ctx=c.getContext("2d");
 resize(); window.onresize=resize;
 function resize(){ c.width=innerWidth; c.height=innerHeight }
 
-let rockets=[], particles=[], smoke=[];
+let rockets=[], sparks=[], smoke=[];
 let launched=0, max=5;
 
 /* 🚀 ROCKET */
@@ -86,47 +91,52 @@ class Rocket{
   constructor(){
     this.x=Math.random()*c.width;
     this.y=c.height;
-    this.vy=-10-Math.random()*2;
+    this.vy=-11-Math.random()*3;
     this.color=`hsl(${Math.random()*360},100%,60%)`;
   }
   update(){
     this.y+=this.vy;
-    smoke.push(new Smoke(this.x,this.y));
-    if(this.y<c.height*0.45){ this.explode(); return false }
+    smoke.push(new Smoke(this.x,this.y,18,0.2));
+    if(this.y<c.height*0.45){
+      this.explode();
+      return false;
+    }
     return true;
   }
   draw(){
     ctx.strokeStyle=this.color;
     ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.moveTo(this.x,this.y+20);
+    ctx.moveTo(this.x,this.y+25);
     ctx.lineTo(this.x,this.y);
     ctx.stroke();
   }
   explode(){
-    for(let i=0;i<140;i++)
-      particles.push(new Particle(this.x,this.y,this.color));
+    for(let i=0;i<180;i++)
+      sparks.push(new Spark(this.x,this.y,this.color));
+    for(let i=0;i<10;i++)
+      smoke.push(new Smoke(this.x,this.y,30,0.25));
   }
 }
 
-/* 💥 REAL FIREWORK PARTICLE */
-class Particle{
+/* 💥 SPARK (REAL FIREWORK PARTICLE) */
+class Spark{
   constructor(x,y,c){
     const a=Math.random()*Math.PI*2;
-    const s=Math.random()*6+2;
+    const s=Math.random()*7+3;
     this.x=x; this.y=y;
     this.vx=Math.cos(a)*s;
     this.vy=Math.sin(a)*s;
-    this.g=0.06;
+    this.g=0.07;
     this.a=1;
     this.c=c;
-    this.r=2.5;
+    this.r=2.8;
   }
   update(){
     this.vy+=this.g;
     this.x+=this.vx;
     this.y+=this.vy;
-    this.a-=0.012;
+    this.a-=0.01;
     return this.a>0;
   }
   draw(){
@@ -139,42 +149,42 @@ class Particle{
   }
 }
 
-/* 🌫️ SMOKE */
+/* 🌫️ SMOKE CLOUD */
 class Smoke{
-  constructor(x,y){
-    this.x=x+Math.random()*8-4;
+  constructor(x,y,r,a){
+    this.x=x+Math.random()*12-6;
     this.y=y;
-    this.r=12+Math.random()*12;
-    this.a=0.18;
+    this.r=r+Math.random()*15;
+    this.a=a;
   }
   update(){
-    this.y-=0.4;
-    this.a-=0.003;
+    this.y-=0.35;
+    this.a-=0.0025;
     return this.a>0;
   }
   draw(){
-    ctx.fillStyle=`rgba(200,200,200,${this.a})`;
+    ctx.fillStyle=`rgba(220,220,220,${this.a})`;
     ctx.beginPath();
     ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
     ctx.fill();
   }
 }
 
-/* 🚀 LAUNCH */
+/* 🚀 LAUNCH SEQUENCE */
 let launcher=setInterval(()=>{
   rockets.push(new Rocket());
   launched++;
   if(launched===max) clearInterval(launcher);
-},1700);
+},1600);
 
 /* 🎬 LOOP */
 function animate(){
-  ctx.fillStyle="rgba(0,0,0,0.28)";
+  ctx.fillStyle="rgba(0,0,0,0.3)";
   ctx.fillRect(0,0,c.width,c.height);
 
   rockets=rockets.filter(r=>{ r.draw(); return r.update() });
-  particles=particles.filter(p=>{ p.draw(); return p.update() });
-  smoke=smoke.filter(s=>{ s.draw(); return s.update() });
+  sparks=sparks.filter(s=>{ s.draw(); return s.update() });
+  smoke=smoke.filter(sm=>{ sm.draw(); return sm.update() });
 
   requestAnimationFrame(animate);
 }
@@ -187,7 +197,7 @@ setTimeout(()=>{
     document.querySelector(".text2").classList.add("fade");
     setTimeout(()=>location.href="party.html",5000);
   },2000);
-}, max*1700 + 1200);
+}, max*1600 + 1400);
 </script>
 
 </body>
