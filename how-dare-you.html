@@ -3,88 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>How Dare You</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
+
+body{
   height:100vh;
-  background: radial-gradient(circle, #1a0000, #000);
+  background: radial-gradient(circle at center, #1a0000, #000);
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:'Segoe UI', sans-serif;
-  color:white;
   overflow:hidden;
 }
 
 .container{
   text-align:center;
+  color:white;
+  z-index:2;
 }
 
-/* Knife slow shake */
-.knife{
-  width:300px;
-  animation:shake 0.35s infinite;
-}
-
-@keyframes shake{
-  0%{transform:translate(0,0) rotate(-1deg);}
-  50%{transform:translate(1px,1px) rotate(1deg);}
-  100%{transform:translate(-1px,-1px) rotate(-1deg);}
+/* smaller stickers */
+.sticker{
+  width:180px;
+  margin:10px auto;
 }
 
 h1{
-  font-size:36px;
+  font-size:26px;
   color:#ff4d4d;
-  text-shadow:0 0 20px red;
-  margin:20px 0;
-}
-
-.cry{
-  width:220px;
+  margin:10px 0;
 }
 
 button{
-  margin-top:25px;
-  padding:15px 34px;
-  font-size:18px;
+  margin-top:18px;
+  padding:12px 26px;
+  font-size:17px;
   border:none;
-  border-radius:30px;
-  background:#ff0033;
+  border-radius:25px;
+  background:#ff4d4d;
   color:white;
   cursor:pointer;
-  animation:bounce 1.6s infinite;
 }
 
-@keyframes bounce{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-6px);}
+/* soft fog */
+.fog{
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:url("https://i.imgur.com/8KQkZ8B.png");
+  opacity:0.12;
+  animation:fogMove 80s linear infinite;
+}
+
+@keyframes fogMove{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <img src="cat-knife.png" class="knife">
+<div class="fog"></div>
+
+<div class="container" onclick="startMusic()">
+  <img src="cat-knife.png" class="sticker">
   <h1>How Dare You? 🔪</h1>
-  <img src="cat-cry.png" class="cry">
-  <br>
-  <button onclick="goBack()">I’ll give you party 😿</button>
-</div>
-
-<script>
-function goBack(){
-  // Stop music from previous page
-  const audios = document.querySelectorAll("audio");
-  audios.forEach(a=>{
-    a.pause();
-    a.currentTime = 0;
-  });
-  window.location.href="party.html";
-}
-</script>
-
-</body>
-</html>
+  <img src="cat-cry.png" class="sticker">
