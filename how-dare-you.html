@@ -9,37 +9,20 @@
 body{
   margin:0;
   height:100vh;
-  background: radial-gradient(circle at center, #1a0000, #000);
+  background: radial-gradient(circle, #1a0000, #000);
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
   font-family:'Segoe UI', sans-serif;
   color:white;
-}
-
-/* Fog + red glow */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 40% 40%, rgba(255,0,0,0.25), transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05), transparent 60%);
-  animation:fog 6s infinite alternate;
-}
-
-@keyframes fog{
-  from{opacity:0.3;}
-  to{opacity:0.6;}
+  overflow:hidden;
 }
 
 .container{
   text-align:center;
-  z-index:2;
 }
 
-/* Knife cat – slow shake */
+/* Knife slow shake */
 .knife{
   width:300px;
   animation:shake 0.35s infinite;
@@ -53,18 +36,17 @@ body::before{
 
 h1{
   font-size:36px;
-  margin:20px 0;
   color:#ff4d4d;
   text-shadow:0 0 20px red;
+  margin:20px 0;
 }
 
 .cry{
   width:220px;
-  margin-top:10px;
 }
 
 button{
-  margin-top:28px;
+  margin-top:25px;
   padding:15px 34px;
   font-size:18px;
   border:none;
@@ -84,36 +66,23 @@ button{
 
 <body>
 
-<!-- Background music -->
-<audio id="bgm" loop>
-  <source src="song.mp3" type="audio/mpeg">
-</audio>
-
 <div class="container">
-  <!-- TOP sticker -->
-  <img src="cat-knife.png" class="knife" alt="Knife Cat">
-
+  <img src="cat-knife.png" class="knife">
   <h1>How Dare You? 🔪</h1>
-
-  <!-- BELOW text sticker -->
-  <img src="cat-cry.png" class="cry" alt="Crying Cat">
-
+  <img src="cat-cry.png" class="cry">
   <br>
   <button onclick="goBack()">I’ll give you party 😿</button>
 </div>
 
 <script>
-/* Play music after first tap (browser rule) */
-document.body.addEventListener("click", () => {
-  const music = document.getElementById("bgm");
-  music.play();
-}, { once: true });
-
 function goBack(){
-  const music = document.getElementById("bgm");
-  music.pause();
-  music.currentTime = 0;
-  window.location.href = "party.html";
+  // Stop music from previous page
+  const audios = document.querySelectorAll("audio");
+  audios.forEach(a=>{
+    a.pause();
+    a.currentTime = 0;
+  });
+  window.location.href="party.html";
 }
 </script>
 
