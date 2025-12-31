@@ -2,115 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>How Dare You?</title>
+<title>How Dare You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden;
-  color: white;
+body{
+  margin:0;
+  height:100vh;
+  background: radial-gradient(circle, #1a0000, #000);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  font-family:'Segoe UI', sans-serif;
+  color:white;
 }
 
-/* ===== CENTER BOX ===== */
-#box {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+/* Fog + red glow */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background: radial-gradient(circle at 40% 40%, rgba(255,0,0,0.25), transparent 60%);
+  animation:fog 5s infinite alternate;
 }
 
-/* ===== STICKERS ===== */
-#knifeCat {
-  width: 360px;
-  margin-bottom: 20px;
+@keyframes fog{
+  from{opacity:0.3;}
+  to{opacity:0.6;}
 }
 
-#cryCat {
-  width: 260px;
-  margin-top: 20px;
+.container{
+  text-align:center;
+  z-index:2;
 }
 
-/* ===== TEXT ===== */
-#text {
-  font-size: 48px;
-  font-weight: bold;
-  color: #ff4444;
-  margin: 12px 0;
+/* Knife shake */
+.knife{
+  width:300px;
+  animation:shake 0.14s infinite;
 }
 
-/* ===== BUTTON ===== */
-#partyBtn {
-  margin-top: 32px;
-  padding: 16px 38px;
-  font-size: 24px;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  background: #4caf50;
-  color: white;
-  animation: bounce 1.6s infinite;
+@keyframes shake{
+  0%{transform:translate(0,0) rotate(-2deg);}
+  50%{transform:translate(2px,2px) rotate(2deg);}
+  100%{transform:translate(-2px,-2px) rotate(-2deg);}
 }
 
-@keyframes bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.12); }
-  100% { transform: scale(1); }
+h1{
+  font-size:36px;
+  margin:20px 0;
+  color:#ff4d4d;
+  text-shadow:0 0 20px red;
+}
+
+.cry{
+  width:220px;
+  margin-top:10px;
+}
+
+button{
+  margin-top:25px;
+  padding:15px 32px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:#ff0033;
+  color:white;
+  cursor:pointer;
+  animation:bounce 1.4s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-7px);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 BACKGROUND MUSIC -->
-<audio id="bgMusic" src="./funny-song.mp3" autoplay loop></audio>
+<audio id="bgm" autoplay>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
 
-<div id="box">
-  <!-- 🔪 CAT WITH KNIFE -->
-  <img id="knifeCat" src="./cat-knife.png" alt="Cat with knife">
+<div class="container">
+  <img src="cat-knife.png" class="knife" alt="Knife Cat">
 
-  <!-- TEXT -->
-  <div id="text">How Dare You? 🔪</div>
+  <h1>How Dare You? 🔪</h1>
 
-  <!-- 😿 CRYING CAT -->
-  <img id="cryCat" src="./cat-cry.png" alt="Crying cat">
+  <img src="cat-cry.png" class="cry" alt="Crying Cat">
 
-  <!-- BUTTON -->
-  <button id="partyBtn">I’ll give you party</button>
+  <br>
+  <button onclick="goBack()">I’ll give you party 😿</button>
 </div>
 
 <script>
-const music = document.getElementById("bgMusic");
-const btn = document.getElementById("partyBtn");
-
-/* Ensure autoplay after interaction */
-window.addEventListener("load", () => {
-  music.volume = 0.8;
-  music.play().catch(() => {
-    document.body.addEventListener("click", () => {
-      music.play();
-    }, { once: true });
-  });
-});
-
-/* Stop music + redirect */
-btn.addEventListener("click", () => {
-  music.pause();
-  music.currentTime = 0;
-  window.location.href = "party.html";
-});
-
-/* Safety stop on leave */
-window.addEventListener("beforeunload", () => {
-  music.pause();
-});
+function goBack(){
+  document.getElementById("bgm").pause();
+  window.location.href="party.html";
+}
 </script>
 
 </body>
