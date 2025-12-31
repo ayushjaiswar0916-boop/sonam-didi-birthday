@@ -4,13 +4,37 @@
 <meta charset="UTF-8">
 <title>Party?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
 <style>
-body{margin:0;height:100vh;background:#000;display:flex;justify-content:center;align-items:center;font-family:sans-serif;color:white;text-align:center;}
-.container{z-index:2;}
-.container img{width:260px;margin:15px auto;}
-h1{font-size:24px;margin:20px 0;}
-button{padding:14px 30px;margin:10px;font-size:18px;border:none;border-radius:25px;cursor:pointer;}
+body{
+  margin:0;
+  height:100vh;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:sans-serif;
+  color:white;
+  text-align:center;
+}
+.container{
+  z-index:2;
+}
+.container img{
+  width:350px; /* Bigger sticker */
+  margin:20px auto;
+}
+h1{
+  font-size:28px;
+  margin:20px 0;
+}
+button{
+  padding:16px 32px;
+  margin:15px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+}
 .yes{background:#00ff9c;}
 .no{background:#ff4d6d;color:white;}
 </style>
@@ -28,7 +52,7 @@ button{padding:14px 30px;margin:10px;font-size:18px;border:none;border-radius:25
 
 <script>
 function goYes(){
-  alert("Yay! Let's continue 🎉"); // Or redirect to next page
+  alert("Yay! Let's continue 🎉"); // Replace with next page if needed
 }
 
 function goNo(){
