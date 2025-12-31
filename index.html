@@ -1,116 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday Sonam Didi</title>
+
 <style>
 html,body{
   margin:0;
-  padding:0;
   width:100%;
   height:100%;
   background:black;
-  font-family:"Times New Roman", serif;
   overflow:hidden;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  text-align:center;
-  position:relative;
+  font-family:"Times New Roman", serif;
 }
 
-/* Starry & foggy background */
-body::before {
+/* 🌟 STARRY BACKGROUND */
+body::before{
   content:"";
-  position:absolute;
+  position:fixed;
   inset:0;
   background:
-    radial-gradient(1px 1px at 10% 20%, white, transparent),
-    radial-gradient(1.5px 1.5px at 30% 50%, white, transparent),
-    radial-gradient(1px 1px at 70% 30%, white, transparent),
-    radial-gradient(2px 2px at 80% 70%, white, transparent);
-  opacity:0.5;
-  pointer-events:none;
-  z-index:0;
-}
-body::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 80%);
-  opacity:0.3;
-  pointer-events:none;
+    radial-gradient(1px 1px at 10% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 60%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, #fff, transparent),
+    radial-gradient(2px 2px at 80% 70%, #fff, transparent);
+  opacity:0.6;
   z-index:0;
 }
 
-canvas{
-  position:absolute;
-  top:0;
-  left:0;
+/* 🌫️ FOG LAYER */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.08), transparent 70%);
+  animation:fogMove 12s linear infinite;
   z-index:1;
 }
 
-.text1,.text2{
-  opacity:0;
-  position:relative;
+@keyframes fogMove{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-40px)}
+  100%{transform:translateX(0)}
+}
+
+canvas{
+  position:fixed;
+  inset:0;
   z-index:2;
+}
+
+.text1,.text2{
+  position:absolute;
+  width:100%;
+  text-align:center;
   color:white;
+  opacity:0;
+  z-index:3;
 }
+
 .text1{
+  top:40%;
   font-size:48px;
-  margin-bottom:20px;
 }
+
 .text2{
+  top:52%;
   font-size:36px;
 }
-@keyframes fadeIn{ to { opacity:1; } }
+
+.fade{
+  animation:fadeIn 2s forwards;
+}
+
+@keyframes fadeIn{
+  to{opacity:1}
+}
 </style>
 </head>
+
 <body>
 
-<canvas id="canvas"></canvas>
+<canvas id="c"></canvas>
+
 <div class="text1">AND QUIETLY IT BECAME NOW</div>
 <div class="text2">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
 
 <script>
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const canvas=document.getElementById("c");
+const ctx=canvas.getContext("2d");
+resize();
+window.onresize=resize;
 
-window.addEventListener('resize',()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-});
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
 
-// Rockets + particles
-let rockets=[], particles=[];
-let launchCount=0;
-const maxRockets=5;
+/* 🔥 FIREWORK DATA */
+let rockets=[],particles=[],smoke=[];
+let launched=0, max=5;
 
-// Rocket class
+/* 🚀 ROCKET */
 class Rocket{
   constructor(){
     this.x=Math.random()*canvas.width;
     this.y=canvas.height;
-    this.speedY=-7-Math.random()*2;
-    this.color=`hsl(${Math.random()*360},100%,50%)`;
-    this.exploded=false;
+    this.vy=-8;
+    this.color=`hsl(${Math.random()*360},100%,60%)`;
   }
   update(){
-    this.y+=this.speedY;
-    if(this.y<canvas.height/2 && !this.exploded){
+    this.y+=this.vy;
+    smoke.push(new Smoke(this.x,this.y));
+    if(this.y<canvas.height*0.45){
       this.explode();
-      this.exploded=true;
-      if(launchCount===maxRockets) setTimeout(showTexts,1500);
+      return false;
     }
-  }
-  explode(){
-    for(let i=0;i<60;i++){
-      particles.push(new Particle(this.x,this.y,this.color));
-    }
+    return true;
   }
   draw(){
     ctx.fillStyle=this.color;
@@ -118,101 +125,98 @@ class Rocket{
     ctx.arc(this.x,this.y,4,0,Math.PI*2);
     ctx.fill();
   }
+  explode(){
+    for(let i=0;i<80;i++)
+      particles.push(new Particle(this.x,this.y,this.color));
+  }
 }
 
-// Particle class
+/* 💥 PARTICLES */
 class Particle{
-  constructor(x,y,color){
-    this.x=x;
-    this.y=y;
-    this.speedX=(Math.random()-0.5)*6;
-    this.speedY=(Math.random()-0.5)*6;
-    this.alpha=1;
-    this.color=color;
-    this.radius=2+Math.random()*2;
+  constructor(x,y,c){
+    this.x=x;this.y=y;
+    this.vx=(Math.random()-0.5)*7;
+    this.vy=(Math.random()-0.5)*7;
+    this.a=1; this.c=c;
   }
   update(){
-    this.x+=this.speedX;
-    this.y+=this.speedY;
-    this.alpha-=0.02;
+    this.x+=this.vx;
+    this.y+=this.vy;
+    this.a-=0.02;
+    return this.a>0;
   }
   draw(){
-    ctx.fillStyle=this.color;
-    ctx.globalAlpha=this.alpha;
+    ctx.globalAlpha=this.a;
+    ctx.fillStyle=this.c;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+    ctx.arc(this.x,this.y,3,0,Math.PI*2);
     ctx.fill();
     ctx.globalAlpha=1;
   }
 }
 
-// Smoke particles (rising subtle fog from bottom)
-let smokeParticles=[];
+/* 🌫️ SMOKE */
 class Smoke{
-  constructor(){
-    this.x=Math.random()*canvas.width;
-    this.y=canvas.height;
-    this.radius=10+Math.random()*10;
-    this.speedY=0.5+Math.random()*0.5;
-    this.alpha=0.1+Math.random()*0.2;
+  constructor(x,y){
+    this.x=x+Math.random()*6-3;
+    this.y=y;
+    this.r=8+Math.random()*8;
+    this.a=0.15;
   }
   update(){
-    this.y-=this.speedY;
-    this.alpha-=0.002;
-    if(this.alpha<=0){
-      this.y=canvas.height;
-      this.alpha=0.1+Math.random()*0.2;
-      this.x=Math.random()*canvas.width;
-    }
+    this.y-=0.3;
+    this.a-=0.002;
+    return this.a>0;
   }
   draw(){
+    ctx.fillStyle=`rgba(200,200,200,${this.a})`;
     ctx.beginPath();
-    ctx.fillStyle=`rgba(200,200,200,${this.alpha})`;
-    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
     ctx.fill();
   }
 }
-for(let i=0;i<40;i++) smokeParticles.push(new Smoke());
 
-let rocketInterval=setInterval(()=>{
+/* 🚀 LAUNCH SEQUENCE */
+let launcher=setInterval(()=>{
   rockets.push(new Rocket());
-  launchCount++;
-  if(launchCount>=maxRockets) clearInterval(rocketInterval);
-},2000);
+  launched++;
+  if(launched===max) clearInterval(launcher);
+},1800);
 
+/* 🎬 ANIMATION LOOP */
 function animate(){
-  ctx.fillStyle='rgba(0,0,0,0.2)';
+  ctx.fillStyle="rgba(0,0,0,0.25)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  rockets.forEach(r=>{
-    r.update();
+  rockets=rockets.filter(r=>{
     r.draw();
+    return r.update();
   });
 
-  for(let i=particles.length-1;i>=0;i--){
-    let p=particles[i];
-    p.update();
+  particles=particles.filter(p=>{
     p.draw();
-    if(p.alpha<=0) particles.splice(i,1);
-  }
+    return p.update();
+  });
 
-  smokeParticles.forEach(s=>{
-    s.update();
+  smoke=smoke.filter(s=>{
     s.draw();
+    return s.update();
   });
 
   requestAnimationFrame(animate);
 }
 animate();
 
-// Show texts
-function showTexts(){
-  const t1=document.querySelector('.text1');
-  const t2=document.querySelector('.text2');
-  t1.style.animation="fadeIn 2s forwards";
-  setTimeout(()=>{ t2.style.animation="fadeIn 2s forwards"; },2000);
-  setTimeout(()=>{ window.location.href="party.html"; },7000);
-}
+/* 📝 TEXT + REDIRECT */
+setTimeout(()=>{
+  document.querySelector(".text1").classList.add("fade");
+  setTimeout(()=>{
+    document.querySelector(".text2").classList.add("fade");
+    setTimeout(()=>{
+      window.location.href="party.html";
+    },5000);
+  },2000);
+}, max*1800 + 1200);
 </script>
 
 </body>
