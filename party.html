@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Party?</title>
+<title>Party Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
@@ -10,59 +10,46 @@ body{
   height:100vh;
   background:#000;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
   font-family:sans-serif;
   color:white;
   text-align:center;
 }
-.container{
-  z-index:2;
-}
-.container img{
-  width:350px; /* Bigger sticker */
-  margin:20px auto;
-}
 h1{
-  font-size:28px;
-  margin:20px 0;
+  font-size:32px;
+  margin-bottom:30px;
+  color:#ffcc00;
 }
 button{
+  margin:10px;
   padding:16px 32px;
-  margin:15px;
   font-size:20px;
   border:none;
   border-radius:30px;
+  background:#00ff9c;
   cursor:pointer;
+  font-weight:bold;
 }
-.yes{background:#00ff9c;}
-.no{background:#ff4d6d;color:white;}
+button:hover{
+  transform:scale(1.1);
+  transition:0.3s;
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <img src="cat.png" alt="Cat">
-  <h1>Will you give me Party? Then I'll show you more pages 😼✨</h1>
-  <button class="yes" onclick="goYes()">Yes 😸</button>
-  <button class="no" onclick="goNo()">No 🙀</button>
-</div>
+<h1>Will you give me Party? Then I'll show you more pages 😼✨</h1>
 
-<audio id="bgm" src="funny-song.mp3" loop></audio>
+<!-- Buttons -->
+<button class="yes" onclick="window.location.href='yes-page.html'">
+  Yes 😸
+</button>
 
-<script>
-function goYes(){
-  alert("Yay! Let's continue 🎉"); // Replace with next page if needed
-}
+<button class="no" onclick="window.location.href='how-dare-you.html'">
+  No 😿
+</button>
 
-function goNo(){
-  const music = document.getElementById("bgm");
-  music.play().then(()=>{
-    window.location.href="how-dare-you.html";
-  }).catch(()=>{
-    window.location.href="how-dare-you.html";
-  });
-}
-</script>
 </body>
 </html>
