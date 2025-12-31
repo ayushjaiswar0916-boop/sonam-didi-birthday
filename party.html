@@ -13,40 +13,21 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
-  font-family: 'Segoe UI', sans-serif;
-  color:#fff;
-}
-
-/* Starry background */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-    radial-gradient(1px 1px at 70% 80%, #fff, transparent),
-    radial-gradient(1px 1px at 40% 60%, #fff, transparent),
-    radial-gradient(1px 1px at 80% 20%, #fff, transparent);
-  opacity:0.6;
+  font-family:'Segoe UI', sans-serif;
+  color:white;
 }
 
 .container{
-  z-index:2;
   text-align:center;
-  animation:fadeIn 1.5s ease forwards;
 }
 
 img{
   width:260px;
-  max-width:80vw;
-  margin-bottom:20px;
 }
 
 h1{
   font-size:26px;
-  line-height:1.4;
-  margin-bottom:25px;
+  margin:20px 0;
 }
 
 .buttons{
@@ -56,38 +37,26 @@ h1{
 }
 
 button{
-  padding:14px 28px;
+  padding:14px 30px;
   font-size:18px;
   border:none;
   border-radius:30px;
   cursor:pointer;
-  font-weight:bold;
   animation:bounce 1.6s infinite;
 }
 
-.yes{
-  background:#00ff9c;
-  color:#000;
-}
-
-.no{
-  background:#ff4d6d;
-  color:#fff;
-}
+.yes{ background:#00ff9c; }
+.no{ background:#ff4d6d; color:white; }
 
 @keyframes bounce{
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-6px);}
 }
-
-@keyframes fadeIn{
-  from{opacity:0; transform:scale(0.95);}
-  to{opacity:1; transform:scale(1);}
-}
 </style>
 </head>
 
 <body>
+
 <div class="container">
   <img src="cat.png" alt="Cat">
 
@@ -97,9 +66,26 @@ button{
   </h1>
 
   <div class="buttons">
-    <button class="yes" onclick="location.href='yes.html'">Yes 😸</button>
-    <button class="no" onclick="location.href='how-dare-you.html'">No 🙀</button>
+    <button class="yes">Yes 😸</button>
+    <button class="no" onclick="goToDare()">No 🙀</button>
   </div>
 </div>
+
+<!-- Music (starts on NO click) -->
+<audio id="bgm">
+  <source src="funny-song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function goToDare(){
+  const music = document.getElementById("bgm");
+  music.play().then(()=>{
+    window.location.href = "how-dare-you.html";
+  }).catch(()=>{
+    window.location.href = "how-dare-you.html";
+  });
+}
+</script>
+
 </body>
 </html>
