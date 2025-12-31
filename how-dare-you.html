@@ -3,75 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <title>How Dare You</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: Arial, sans-serif;
-}
-
-body{
-  height:100vh;
-  background: radial-gradient(circle at center, #1a0000, #000);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-}
-
-.container{
-  text-align:center;
-  color:white;
-  z-index:2;
-}
-
-/* smaller stickers */
-.sticker{
-  width:180px;
-  margin:10px auto;
-}
-
-h1{
-  font-size:26px;
-  color:#ff4d4d;
-  margin:10px 0;
-}
-
-button{
-  margin-top:18px;
-  padding:12px 26px;
-  font-size:17px;
-  border:none;
-  border-radius:25px;
-  background:#ff4d4d;
-  color:white;
-  cursor:pointer;
-}
-
-/* soft fog */
-.fog{
-  position:absolute;
-  width:200%;
-  height:200%;
-  background:url("https://i.imgur.com/8KQkZ8B.png");
-  opacity:0.12;
-  animation:fogMove 80s linear infinite;
-}
-
-@keyframes fogMove{
-  from{transform:translateX(0);}
-  to{transform:translateX(-50%);}
-}
+body{margin:0;height:100vh;background:#110000;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:sans-serif;color:white;text-align:center;}
+img{width:220px;margin:10px;}
+h1{font-size:28px;color:#ff4d4d;margin:10px 0;}
+button{margin-top:20px;padding:12px 28px;font-size:18px;border:none;border-radius:25px;background:#ff4d4d;color:white;cursor:pointer;}
 </style>
 </head>
-
 <body>
 
-<div class="fog"></div>
+<img src="cat-knife.png" alt="Knife Cat">
+<h1>How Dare You? 🔪</h1>
+<img src="cat-cry.png" alt="Crying Cat">
+<br>
+<button onclick="goBack()">I’ll give you party 😿</button>
 
-<div class="container" onclick="startMusic()">
-  <img src="cat-knife.png" class="sticker">
-  <h1>How Dare You? 🔪</h1>
-  <img src="cat-cry.png" class="sticker">
+<audio id="bgm" src="funny-song.mp3" loop autoplay></audio>
+
+<script>
+function goBack(){
+  const music = document.getElementById("bgm");
+  music.pause();
+  music.currentTime=0;
+  window.location.href="party.html";
+}
+</script>
+
+</body>
+</html>
