@@ -85,7 +85,42 @@ function resize(){ c.width=innerWidth; c.height=innerHeight }
 
 let rockets=[], sparks=[], smoke=[];
 let launched=0, max=5;
+/* 🔊 AUDIO CONTEXT */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioCtx();
 
+/* 🔓 UNLOCK SOUND ON FIRST TAP */
+document.body.addEventListener("click",()=>{
+  audioCtx.resume();
+},{once:true});
+
+/* 💥 FIREWORK SOUND + SHAKE */
+function fireworkSound(){
+  const noise = audioCtx.createBufferSource();
+  const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.25, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for(let i=0;i<data.length;i++){
+    data[i]=(Math.random()*2-1)*(1-i/data.length);
+  }
+
+  noise.buffer=buffer;
+
+  const filter=audioCtx.createBiquadFilter();
+  filter.type="lowpass";
+  filter.frequency.value=700;
+
+  const gain=audioCtx.createGain();
+  gain.gain.value=1;
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+  noise.start();
+
+  document.body.classList.add("shake");
+  setTimeout(()=>document.body.classList.remove("shake"),300);
+}
 /* 🚀 ROCKET */
 class Rocket{
   constructor(){
