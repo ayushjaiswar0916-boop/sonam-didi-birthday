@@ -2,67 +2,173 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Party Page</title>
+<title>Party?</title>
+
 <style>
-html,body{margin:0;padding:0;width:100%;height:100%;background:black;font-family:'Poppins',sans-serif;color:white;overflow:hidden;}
-#stars, #fog{position:absolute; inset:0;}
-#fog{background:radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 60%),radial-gradient(circle at 70% 30%, rgba(255,255,255,0.04), transparent 60%);animation:fog 40s linear infinite;pointer-events:none;}
-@keyframes fog{from{transform:translateX(0);}to{transform:translateX(-400px);}}
-#box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
-#box h1{font-size:42px;margin-bottom:20px;}
-button{padding:14px 30px;font-size:22px;margin:12px;border:none;border-radius:12px;cursor:pointer;transition: all 0.2s ease;box-shadow: 0 5px 15px rgba(0,0,0,0.3);position: relative;}
-button:hover{animation:bounce 0.6s;}
-@keyframes bounce{0%{transform: translateY(0);}30%{transform: translateY(-15px);}50%{transform: translateY(0);}70%{transform: translateY(-8px);}100%{transform: translateY(0);}}
-button.click{animation:jiggle 0.3s;}
-@keyframes jiggle{0%{transform: rotate(0deg);}25%{transform: rotate(-15deg);}50%{transform: rotate(10deg);}75%{transform: rotate(-10deg);}100%{transform: rotate(0deg);}}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  color: white;
+}
+
+/* ===== STAR BACKGROUND ===== */
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ===== FLOATING HEARTS ===== */
+.heart {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.7;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(100vh) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-10vh) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* ===== MAIN BOX ===== */
+#box {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* ===== CAT STICKER ===== */
+#cat {
+  width: 320px;
+  margin-bottom: 20px;
+  animation: popIn 0.8s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* ===== TEXT ===== */
+#text {
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 14px 36px;
+  font-size: 22px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin: 10px;
+  animation: bounce 1.6s infinite;
+}
+
+#yes {
+  background: #4caf50;
+  color: white;
+}
+
+#no {
+  background: #ff4444;
+  color: white;
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
 </style>
 </head>
+
 <body>
+
 <canvas id="stars"></canvas>
-<div id="fog"></div>
+
 <div id="box">
-  <h1>Will you give me a party? 😼</h1>
+  <img id="cat" src="./cat.png" alt="Cute Cat">
+  <div id="text">Will you give me a party? 😼</div>
+
   <div>
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
+    <button id="yes" class="btn">Yes 🎉</button>
+    <button id="no" class="btn">No 😿</button>
   </div>
 </div>
 
 <script>
-// Stars
-const starCanvas=document.getElementById("stars");
-const sctx=starCanvas.getContext("2d");
-function resize(){ starCanvas.width=innerWidth; starCanvas.height=innerHeight; }
-resize(); window.onresize=resize;
-let stars=[];
-for(let i=0;i<200;i++) stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5});
-function drawStars(){ sctx.clearRect(0,0,innerWidth,innerHeight); sctx.fillStyle="white"; stars.forEach(s=>{sctx.beginPath();sctx.arc(s.x,s.y,s.r,0,Math.PI*2);sctx.fill();}); }
-function animateStars(){ drawStars(); requestAnimationFrame(animateStars); }
-animateStars();
+/* ===== STAR BACKGROUND ===== */
+const c = document.getElementById("stars");
+const ctx = c.getContext("2d");
 
-// Button sound
-const clickAudio = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+function resize() {
+  c.width = innerWidth;
+  c.height = innerHeight;
+}
+resize();
+window.onresize = resize;
 
-const yesBtn=document.getElementById("yes");
-const noBtn=document.getElementById("no");
-
-function playClickEffect(btn){
-  btn.classList.add("click");
-  clickAudio.currentTime = 0;
-  clickAudio.play();
-  setTimeout(()=>btn.classList.remove("click"),300);
+let stars = [];
+for (let i = 0; i < 180; i++) {
+  stars.push({
+    x: Math.random() * c.width,
+    y: Math.random() * c.height,
+    r: Math.random() * 1.5
+  });
 }
 
-yesBtn.addEventListener("click", ()=>{
-  playClickEffect(yesBtn);
-  alert("Yay! Party Time 🎉");
-});
+function drawStars() {
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle = "white";
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
 
-noBtn.addEventListener("click", ()=>{
-  playClickEffect(noBtn);
-  // Redirect to How Dare You page
-  setTimeout(()=>{ window.location.href="how-dare-you.html"; }, 300);
-});
+/* ===== FLOATING HEARTS ===== */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💕";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (16 + Math.random()*16) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}, 800);
+
+/* ===== BUTTON ACTIONS ===== */
+document.getElementById("yes").onclick = () => {
+  alert("Party confirmed 🎉😼");
+};
+
+document.getElementById("no").onclick = () => {
+  window.location.href = "how-dare-you.html";
+};
 </script>
+
 </body>
 </html>
