@@ -14,7 +14,7 @@ html,body{
   font-family:"Times New Roman", serif;
 }
 
-/* 🌟 STARRY BACKGROUND */
+/* 🌟 STARS */
 body::before{
   content:"";
   position:fixed;
@@ -22,26 +22,24 @@ body::before{
   background:
     radial-gradient(1px 1px at 10% 20%, #fff, transparent),
     radial-gradient(1px 1px at 30% 60%, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 70% 40%, #fff, transparent),
-    radial-gradient(2px 2px at 80% 70%, #fff, transparent);
-  opacity:0.6;
+    radial-gradient(2px 2px at 70% 40%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 80% 75%, #fff, transparent);
+  opacity:0.7;
   z-index:0;
 }
 
-/* 🌫️ FOG LAYER */
+/* 🌫️ FOG */
 body::after{
   content:"";
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.08), transparent 70%);
-  animation:fogMove 12s linear infinite;
+  background:radial-gradient(circle at 50% 80%, rgba(255,255,255,0.08), transparent 70%);
+  animation:fog 14s linear infinite;
   z-index:1;
 }
-
-@keyframes fogMove{
+@keyframes fog{
   0%{transform:translateX(0)}
-  50%{transform:translateX(-40px)}
+  50%{transform:translateX(-50px)}
   100%{transform:translateX(0)}
 }
 
@@ -60,23 +58,11 @@ canvas{
   z-index:3;
 }
 
-.text1{
-  top:40%;
-  font-size:48px;
-}
+.text1{ top:40%; font-size:48px; }
+.text2{ top:52%; font-size:36px; }
 
-.text2{
-  top:52%;
-  font-size:36px;
-}
-
-.fade{
-  animation:fadeIn 2s forwards;
-}
-
-@keyframes fadeIn{
-  to{opacity:1}
-}
+.fade{ animation:fadeIn 2s forwards; }
+@keyframes fadeIn{ to{opacity:1} }
 </style>
 </head>
 
@@ -88,68 +74,66 @@ canvas{
 <div class="text2">Happy Birthday 2000–2026<br>Sonam Didi ✨</div>
 
 <script>
-const canvas=document.getElementById("c");
-const ctx=canvas.getContext("2d");
-resize();
-window.onresize=resize;
+const c=document.getElementById("c"),ctx=c.getContext("2d");
+resize(); window.onresize=resize;
+function resize(){ c.width=innerWidth; c.height=innerHeight }
 
-function resize(){
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
-}
-
-/* 🔥 FIREWORK DATA */
-let rockets=[],particles=[],smoke=[];
+let rockets=[], particles=[], smoke=[];
 let launched=0, max=5;
 
 /* 🚀 ROCKET */
 class Rocket{
   constructor(){
-    this.x=Math.random()*canvas.width;
-    this.y=canvas.height;
-    this.vy=-8;
+    this.x=Math.random()*c.width;
+    this.y=c.height;
+    this.vy=-10-Math.random()*2;
     this.color=`hsl(${Math.random()*360},100%,60%)`;
   }
   update(){
     this.y+=this.vy;
     smoke.push(new Smoke(this.x,this.y));
-    if(this.y<canvas.height*0.45){
-      this.explode();
-      return false;
-    }
+    if(this.y<c.height*0.45){ this.explode(); return false }
     return true;
   }
   draw(){
-    ctx.fillStyle=this.color;
+    ctx.strokeStyle=this.color;
+    ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,4,0,Math.PI*2);
-    ctx.fill();
+    ctx.moveTo(this.x,this.y+20);
+    ctx.lineTo(this.x,this.y);
+    ctx.stroke();
   }
   explode(){
-    for(let i=0;i<80;i++)
+    for(let i=0;i<140;i++)
       particles.push(new Particle(this.x,this.y,this.color));
   }
 }
 
-/* 💥 PARTICLES */
+/* 💥 REAL FIREWORK PARTICLE */
 class Particle{
   constructor(x,y,c){
-    this.x=x;this.y=y;
-    this.vx=(Math.random()-0.5)*7;
-    this.vy=(Math.random()-0.5)*7;
-    this.a=1; this.c=c;
+    const a=Math.random()*Math.PI*2;
+    const s=Math.random()*6+2;
+    this.x=x; this.y=y;
+    this.vx=Math.cos(a)*s;
+    this.vy=Math.sin(a)*s;
+    this.g=0.06;
+    this.a=1;
+    this.c=c;
+    this.r=2.5;
   }
   update(){
+    this.vy+=this.g;
     this.x+=this.vx;
     this.y+=this.vy;
-    this.a-=0.02;
+    this.a-=0.012;
     return this.a>0;
   }
   draw(){
     ctx.globalAlpha=this.a;
     ctx.fillStyle=this.c;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
     ctx.fill();
     ctx.globalAlpha=1;
   }
@@ -158,14 +142,14 @@ class Particle{
 /* 🌫️ SMOKE */
 class Smoke{
   constructor(x,y){
-    this.x=x+Math.random()*6-3;
+    this.x=x+Math.random()*8-4;
     this.y=y;
-    this.r=8+Math.random()*8;
-    this.a=0.15;
+    this.r=12+Math.random()*12;
+    this.a=0.18;
   }
   update(){
-    this.y-=0.3;
-    this.a-=0.002;
+    this.y-=0.4;
+    this.a-=0.003;
     return this.a>0;
   }
   draw(){
@@ -176,47 +160,34 @@ class Smoke{
   }
 }
 
-/* 🚀 LAUNCH SEQUENCE */
+/* 🚀 LAUNCH */
 let launcher=setInterval(()=>{
   rockets.push(new Rocket());
   launched++;
   if(launched===max) clearInterval(launcher);
-},1800);
+},1700);
 
-/* 🎬 ANIMATION LOOP */
+/* 🎬 LOOP */
 function animate(){
-  ctx.fillStyle="rgba(0,0,0,0.25)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(0,0,0,0.28)";
+  ctx.fillRect(0,0,c.width,c.height);
 
-  rockets=rockets.filter(r=>{
-    r.draw();
-    return r.update();
-  });
-
-  particles=particles.filter(p=>{
-    p.draw();
-    return p.update();
-  });
-
-  smoke=smoke.filter(s=>{
-    s.draw();
-    return s.update();
-  });
+  rockets=rockets.filter(r=>{ r.draw(); return r.update() });
+  particles=particles.filter(p=>{ p.draw(); return p.update() });
+  smoke=smoke.filter(s=>{ s.draw(); return s.update() });
 
   requestAnimationFrame(animate);
 }
 animate();
 
-/* 📝 TEXT + REDIRECT */
+/* 📝 TEXT + NEXT PAGE */
 setTimeout(()=>{
   document.querySelector(".text1").classList.add("fade");
   setTimeout(()=>{
     document.querySelector(".text2").classList.add("fade");
-    setTimeout(()=>{
-      window.location.href="party.html";
-    },5000);
+    setTimeout(()=>location.href="party.html",5000);
   },2000);
-}, max*1800 + 1200);
+}, max*1700 + 1200);
 </script>
 
 </body>
